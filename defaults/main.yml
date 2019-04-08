@@ -14,3 +14,4 @@ vsphere_password: 'Password1!'                    # The password for the above u
 vsphere_datacenter: 'prod'                        # Which Datacenter your VM is in
 
 vsphere_sdk_url: 'https://github.com/vmware/vsphere-automation-sdk-python'    # Git repo with VMWare SDK to clone
+vsphere_sdk_branch: 'master'                                                  # Version of the SDK to clone
