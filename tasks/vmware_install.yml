@@ -1,0 +1,93 @@
+---
+# This playbook takes care of installing the correct packages
+#
+- name: Gather API host facts
+  setup:
+    gather_subset:
+      - min
+  register: api_facts
+  delegate_to: "{{ hostvars[item.item]['vpshere_api_host'] }}"
+
+- name: Install packages - Debian
+  apt:
+    name:
+      - git
+      - python-pip
+    state: present
+  when: api_facts.ansible_facts.ansible_distribution == "Debian"
+  delegate_to: "{{ hostvars[item.item]['vpshere_api_host'] }}"
+
+- block:
+  - name: Configure extra repo's - Redhat
+    rhsm_repository:
+      name: "rhel-server-rhscl-{{ api_facts.ansible_facts.ansible_distribution_major_version }}-rpms"
+      state: present
+
+  - name: Install packages - RedHat
+    yum:
+      name:
+        - git
+        - python27-python-pip
+      state: present
+
+  - name: Place wrapper scripts for SCL
+    copy:
+      dest: "/usr/local/bin/{{ file }}"
+      src: "{{ file }}"
+      mode: 0755
+      owner: root
+      group: root
+    loop:
+      - ansible_vmware_pip
+      - ansible_vmware_python
+    loop_control:
+      loop_var: file
+
+  when: api_facts.ansible_facts.ansible_distribution == "RedHat"
+  delegate_to: "{{ hostvars[item.item]['vpshere_api_host'] }}"
+
+- name: Check Ansible cache directory
+  file:
+    state: directory
+    path: /var/cache/ansible/
+  delegate_to: "{{ hostvars[item.item]['vpshere_api_host'] }}"
+
+- name: Clone vSphere Automation SDK repo
+  git:
+    repo: "{{ vsphere_sdk_url }}"
+    dest: /var/cache/ansible/vsphere-sdk
+    clone: yes
+  delegate_to: "{{ hostvars[item.item]['vpshere_api_host'] }}"
+
+- name: Install vSphere Automation SDK via pip - Debian
+  pip:
+    requirements: /var/cache/ansible/vsphere-sdk/requirements.txt
+    extra_args: --extra-index-url "file://///var/cache/ansible/vsphere-sdk/lib"
+    state: forcereinstall
+  delegate_to: "{{ hostvars[item.item]['vpshere_api_host'] }}"
+  when: api_facts.ansible_facts.ansible_distribution == "Debian"
+
+- block:
+  - name: Install vSphere Automation SDK via pip - RedHat
+    pip:
+      requirements: /var/cache/ansible/vsphere-sdk/requirements.txt
+      extra_args: --extra-index-url "file://///var/cache/ansible/vsphere-sdk/lib"
+      state: forcereinstall
+      executable: /usr/local/bin/ansible_vmware_pip
+
+  - name: Please reconfigure the API host in the Ansible Inventory
+    fail:
+      msg: |
+        This host needs to be reconfigured in the Ansible Inventory to continue
+        running.
+
+        For this role we need to change the ansible_python_interpreter to include
+        the modules just installed.
+
+        Please configure {{ hostvars[item.item]['vpshere_api_host'] }} as follows in the inventory:
+
+        {{ hostvars[item.item]['vpshere_api_host'] }} ansible_python_interpreter=/usr/local/bin/ansible_vmware_python
+
+
+  delegate_to: "{{ hostvars[item.item]['vpshere_api_host'] }}"
+  when: api_facts.ansible_facts.ansible_distribution == "RedHat"

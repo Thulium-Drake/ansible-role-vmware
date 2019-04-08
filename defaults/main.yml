@@ -1,0 +1,16 @@
+---
+# Default waiting time before vmware_guest_powerstate returns
+vmware_powerstate_wait: 600
+
+# Default name for snapshot if not otherwise set
+default_snapshot_name: 'ansible_snap_default'
+
+# Connection information for vSphere
+vpshere_api_host: 'localhost'                     # The host that has pyVmomi installed
+vsphere_host: 'vcenter-prd.example.com'           # Your vCenter machine
+vsphere_validate_certs: no                        # Whether to check vSphere's SSL cert or not
+vsphere_username: 'administrator@vsphere.local'   # A useraccount with sufficient privileges
+vsphere_password: 'Password1!'                    # The password for the above user
+vsphere_datacenter: 'prod'                        # Which Datacenter your VM is in
+
+vsphere_sdk_url: 'https://github.com/vmware/vsphere-automation-sdk-python'    # Git repo with VMWare SDK to clone

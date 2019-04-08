@@ -1,0 +1,29 @@
+---
+# This role will manage snapshots of all targeted VMs.
+#
+- block:
+  - name: Get current date
+    setup:
+      filter: ansible_date_time
+    delegate_to: "{{ hostvars[item.vm]['vpshere_api_host'] }}"
+    loop: "{{ vm_location['results'] }}"
+  - name: Set snapshot name
+    set_fact:
+      target_snapshot_name: "ansible_snap_{{ ansible_date_time.date }}"
+    delegate_to: "{{ hostvars[item.vm]['vpshere_api_host'] }}"
+    loop: "{{ vm_location['results'] }}"
+  when: target_state == "present" and target_snapshot_name is undefined
+
+- name: Execute snapshot action
+  vmware_guest_snapshot:
+    hostname: "{{ hostvars[item.vm]['vsphere_host'] }}"
+    username: "{{ hostvars[item.vm]['vsphere_username'] }}"
+    password: "{{ hostvars[item.vm]['vsphere_password'] }}"
+    folder: "{{ item.folders[0] }}"
+    datacenter: "{{ item.folders[0].split('/')[1] }}"
+    name: "{{ item.vm }}"
+    validate_certs: "{{ vsphere_validate_certs }}"
+    state: "{{ target_state }}"
+    snapshot_name: "{{ target_snapshot_name | default( default_snapshot_name ) }}"
+  delegate_to: "{{ hostvars[item.vm]['vpshere_api_host'] }}"
+  loop: "{{ vm_location['results'] }}"

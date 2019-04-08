@@ -1,0 +1,15 @@
+---
+# This playbook is used to locate VMs inside a vSphere datacenter, on which
+# then actions can be run.
+- name: "Locate VM in vSphere"
+  vmware_guest_find:
+    hostname: "{{ hostvars[vm]['vsphere_host'] }}"
+    username: "{{ hostvars[vm]['vsphere_username'] }}"
+    password: "{{ hostvars[vm]['vsphere_password'] }}"
+    validate_certs: "{{ vsphere_validate_certs }}"
+    name: "{{ vm }}"
+  register: vm_location
+  delegate_to: "{{ hostvars[vm]['vpshere_api_host'] }}"
+  loop: "{{ query('inventory_hostnames', '{{ target_group }}' ) }}"
+  loop_control:
+    loop_var: vm
