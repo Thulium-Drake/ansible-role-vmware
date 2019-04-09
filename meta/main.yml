@@ -19,5 +19,6 @@ galaxy_info:
     - vmware
     - snapshots
     - vcenter
+    - cloud
 
 dependencies: []
