@@ -1,12 +1,11 @@
-# VMWare role
+# Ansible toolkit for VMWare
 This role provides multiple actions for use with VMWare clusters, it currently
 features:
 
 * Managing VM powerstates
 * Managing VM snapshots
 
-The most documentation can be found in the comment block at the top of each
-file. And for an example setup in which you can use this, please check
+For an example setup in which you can use this, please check
 [vmware-example-setup](https://github.com/Thulium-Drake/ansible/tree/master/vmware-example-setup).
 
 This module can delegate all required actions to a different machine which can
@@ -14,10 +13,11 @@ even be different for each targeted VM. Within this role this host is
 referred to as the 'API host'
 
 # Usage
-This module requires the use of PyVmomi and the VMWare SDK, please check the
-example setup for detailed installation instructions.
+This module requires the use of PyVmomi and the VMWare SDK, this role will
+detect and attempt to install all the required dependencies itself.
 
-This role will attempt to install all the required dependencies itself.
+For detailed instructions on how to install these dependencies manually, please
+check the example setup.
 
 ## RedHat based API hosts need additional setup!
 When running this role on a RedHat system, it will always try to install the
@@ -29,13 +29,13 @@ This has been implemented as follows:
 
 * Run the role, it will install all required software
 * The role will exit with an error
-* Copy the suggested inventory line from the error (hint: use stdout_callback = yaml)
-* Update the inventory with the above line
+* Update the inventory with a line such as below
 * Run the role again, it will work now
 
 I have yet to find a more integrated/elegant solution for this problem.
 
-Please note that changing the Python interpreter might/will break other ansible functionality!
+NOTE: Please note that changing the Python interpreter might/will break other
+ansible functionality!
 
 A workaround for that might be to use a 'virtual name' in the inventory:
 
@@ -43,7 +43,16 @@ A workaround for that might be to use a 'virtual name' in the inventory:
 vmware-api-host.example.com ansible_host=rhel.example.com
 ```
 
-## Powerstate
+## Multiple vSphere clusters? No problem!
+The playbook is configured to lookup the vSphere credentials and information
+in the hostvars of the targeted VM.  So, configuring for multiple VMware
+clusters is as easy as defining these credentials for that specific host/group,
+just like any other variable.
+
+When Ansible runs the playbook, it will lookup all of the required information
+for that specific targeted VM.
+
+# Powerstate
 Supported states are:
 
  * Poweron a VM using either VMWare tools or the virtual power button
@@ -66,13 +75,13 @@ provided using the playbook used to call it:
      run_once: yes
 ```
 
-### Required variables:
+## Required variables:
 
  * target_action: one of the vmware_ playbooks that came with this role
  * target_group: a comma-separated list of hostgroups that are targeted
  * target_action: one of the states in the supported_states list
 
-## Snap
+# Snap
 Supported actions are:
 
  * Create snapshots (automatically with a datestamp, or with a provided name)
@@ -96,15 +105,14 @@ provided using the playbook used to call it:
      run_once: yes
 ```
 
-### Required variables:
+## Required variables:
 
  * target_action: one of the vmware_ playbooks that came with this role
  * target_group: a comma-separated list of hostgroups that are targeted
  * target_state: one of the actions in the supported_states list
 
-### Optional variables:
+## Optional variables:
 
  * target_snapshot_name:
    * When creating snapshots: override the name of the snapshot
    * When reverting/deleting snapshots: the target snapshot to delete
-
