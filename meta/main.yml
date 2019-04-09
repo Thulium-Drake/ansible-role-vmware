@@ -2,6 +2,7 @@ galaxy_info:
   author: Jeffrey van Pelt
   description: An Ansible toolkit for VMWare
   company:
+  role_name: vmware
 
   license: GPLv3
 
