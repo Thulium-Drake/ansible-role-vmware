@@ -1,6 +1,22 @@
 ---
 # Variables file for the VMWare powerstate tasks
 #
-supported_states: [powered-off, powered-on, reboot-guest, restarted, shutdown-guest, suspended, present]
-poweroff_states: [powered-off, reboot-guest, restarted, shutdown-guest, suspended]
-poweron_states: [powered-on, present]
+supported_states:
+  - powered-off
+  - powered-on
+  - reboot-guest
+  - restarted
+  - shutdown-guest
+  - suspended
+  - present
+
+poweroff_states:
+  - powered-off
+  - reboot-guest
+  - restarted
+  - shutdown-guest
+  - suspended
+
+poweron_states:
+  - powered-on
+  - present

@@ -1,3 +1,4 @@
+---
 galaxy_info:
   author: Jeffrey van Pelt
   description: An Ansible toolkit for VMWare
@@ -9,12 +10,12 @@ galaxy_info:
   min_ansible_version: 2.7
 
   platforms:
-  - name: EL
-    versions:
-    - 7
-  - name: Debian
-    versions:
-    - stretch
+    - name: EL
+      versions:
+        - 7
+    - name: Debian
+      versions:
+        - stretch
 
   galaxy_tags:
     - vmware

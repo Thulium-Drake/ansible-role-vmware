@@ -6,7 +6,7 @@
     gather_subset:
       - min
   register: api_facts
-  delegate_to: "{{ hostvars[item.item]['vpshere_api_host'] }}"
+  delegate_to: "{{ hostvars[item.item]['vsphere_api_host'] }}"
 
 - name: Install packages - Debian
   apt:
@@ -15,7 +15,7 @@
       - python-pip
     state: present
   when: api_facts.ansible_facts.ansible_distribution == "Debian"
-  delegate_to: "{{ hostvars[item.item]['vpshere_api_host'] }}"
+  delegate_to: "{{ hostvars[item.item]['vsphere_api_host'] }}"
 
 - block:
     - name: Configure extra repo's - Redhat

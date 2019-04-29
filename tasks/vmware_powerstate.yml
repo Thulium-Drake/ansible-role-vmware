@@ -11,5 +11,5 @@
     validate_certs: "{{ vsphere_validate_certs }}"
     state: "{{ target_state }}"
     state_change_timeout: "{{ vmware_powerstate_wait }}"
-  delegate_to: "{{ hostvars[item.vm]['vpshere_api_host'] }}"
+  delegate_to: "{{ hostvars[item.vm]['vsphere_api_host'] }}"
   loop: "{{ vm_location['results'] }}"

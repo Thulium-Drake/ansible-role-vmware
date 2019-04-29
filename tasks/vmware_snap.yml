@@ -5,12 +5,12 @@
     - name: Get current date
       setup:
         filter: ansible_date_time
-      delegate_to: "{{ hostvars[item.vm]['vpshere_api_host'] }}"
+      delegate_to: "{{ hostvars[item.vm]['vsphere_api_host'] }}"
       loop: "{{ vm_location['results'] }}"
     - name: Set snapshot name
       set_fact:
         target_snapshot_name: "ansible_snap_{{ ansible_date_time.date }}"
-      delegate_to: "{{ hostvars[item.vm]['vpshere_api_host'] }}"
+      delegate_to: "{{ hostvars[item.vm]['vsphere_api_host'] }}"
       loop: "{{ vm_location['results'] }}"
   when: target_state == "present" and target_snapshot_name is undefined
 
@@ -25,5 +25,5 @@
     validate_certs: "{{ vsphere_validate_certs }}"
     state: "{{ target_state }}"
     snapshot_name: "{{ target_snapshot_name | default(default_snapshot_name) }}"
-  delegate_to: "{{ hostvars[item.vm]['vpshere_api_host'] }}"
+  delegate_to: "{{ hostvars[item.vm]['vsphere_api_host'] }}"
   loop: "{{ vm_location['results'] }}"
