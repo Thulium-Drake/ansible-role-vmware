@@ -1,10 +1,4 @@
 ---
-# Default waiting time before vmware_guest_powerstate returns
-vmware_powerstate_wait: 600
-
-# Default name for snapshot if not otherwise set
-default_snapshot_name: 'ansible_snap_default'
-
 ### Connection information for vSphere
 
 # The host that has pyVmomi installed

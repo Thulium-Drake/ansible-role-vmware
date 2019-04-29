@@ -1,0 +1,45 @@
+---
+### Defaults for manage_guest
+
+# Override any warnings, useful when removing poweredon VMs
+target_force: False
+
+# Default datastore to use
+default_datastore: 'datastore1'
+
+# Default folder in which to place the VM
+target_folder: '/'
+
+# Name of the template to create the VM from
+target_template: 'template1'
+
+#### Default storage profile (HDD and CDROM)
+target_disks:
+  - size_gb: 10
+    type: 'thin'
+    datastore: "{{ default_datastore }}"
+target_cdrom:
+  type: iso
+  iso_path: "[{{ default_datastore }}] livecd.iso"
+
+#### Default Network profile
+target_networks:
+  - name: 'VM Network'
+
+#### Default VM hardware profile
+target_ram:
+  mb: 512                   # Amount of RAM
+  reserved_mb: 512          # Amount of memory reserved for this VM
+  limit_mb: 512             # Limit of memory this VM can use
+  reservation_lock: False   # If the reseverd memory is locked for use
+  hotadd: False             # Add memory to this VM while it's running
+target_cpu:
+  cpus: 1                   # The amount of vCPUs
+  cores_per_socket: 1       # Cores per virtual CPU socket
+  limit_mhz: 8096           # Max amount of MHz this VM can use
+  reserved_mhz: 4096        # Reserved amount of MHz this VM can use
+  hotadd: False             # Add CPUs to this VM while it's running
+  hotremove: False          # Remove CPUs from this VM while it's running
+target_scsi: paravirtual    # Type of HDD controller to use
+target_vm_version: 13       # VMWare Hardware version
+target_boot_firmware: efi   # VM BIOS type
