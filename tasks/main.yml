@@ -1,7 +1,7 @@
 ---
 # This playbook will run all common tasks for the VMware role before running
 # the desired action.
-- name: Check dependencies
+- name: 'Check dependencies'
   python_requirements_facts:
     dependencies:
       - 'pyvmomi'
@@ -11,32 +11,32 @@
       - 'nsx_python_sdk'
       - 'nsx_policy_python_sdk'
       - 'vmc_app_python_sdk'
-  register: vmware_deps
+  register: 'vmware_deps'
   delegate_to: "{{ hostvars[item]['vsphere_api_host'] }}"
   loop: "{{ query('inventory_hostnames', '{{ target_group }}' ) }}"
 
-- name: Install dependencies
-  include_tasks: vmware_install.yml
+- name: 'Install dependencies'
+  include_tasks: 'vmware_install.yml'
   when: item.not_found | length
   delegate_to: "{{ hostvars[item.item]['vsphere_api_host'] }}"
   loop: "{{ vmware_deps['results'] }}"
 
-- name: Load {{ target_action }} variables
+- name: "Load {{ target_action }} variables"
   include_vars: "vmware_{{ target_action }}.yml"
 
-- name: Check for complete input, skip is OK
+- name: 'Check for complete input, skip is OK'
   fail:
-    msg: Missing information
+    msg: 'Missing input, please check documentation'
   when: target_state is not defined or target_group is not defined
 
-- name: Check if state is allowed, skip is OK
+- name: 'Check if state is allowed, skip is OK'
   fail:
-    msg: Invalid/unsuppored action!
+    msg: 'Invalid/unsuppored state!'
   when: target_state not in supported_states
 
-- name: Locate VM in vSphere
-  import_tasks: vmware_find.yml
+- name: 'Locate VM in vSphere'
+  import_tasks: 'vmware_find.yml'
   when: target_action != 'provision_guest'
 
-- name: Run {{ target_action }} playbook
+- name: "Run {{ target_action }} playbook"
   include_tasks: "vmware_{{ target_action }}.yml"

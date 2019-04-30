@@ -22,7 +22,7 @@ target_disks:
     type: 'thin'
     datastore: "{{ default_datastore }}"
 target_cdrom:
-  type: iso
+  type: 'iso'
   iso_path: "[{{ default_datastore }}] livecd.iso"
 
 #### Default Network profile

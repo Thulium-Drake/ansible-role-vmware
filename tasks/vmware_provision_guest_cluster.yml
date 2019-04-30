@@ -1,6 +1,6 @@
 ---
 # Create/edit the VM
-- name: Ensure Virtual Machine status
+- name: 'Ensure Virtual Machine status'
   vmware_guest:
     hostname: "{{ hostvars[vm]['vsphere_host'] }}"
     username: "{{ hostvars[vm]['vsphere_username'] }}"
@@ -35,10 +35,10 @@
     customization: "{{ target_customization | default('{}') }}"
     wait_for_ip_address: 'no'
   delegate_to: "{{ hostvars[vm]['vsphere_api_host'] }}"
-  register: deploy
+  register: 'deploy'
   loop: "{{ query('inventory_hostnames', '{{ target_group }}' ) }}"
   loop_control:
-    loop_var: vm
+    loop_var: 'vm'
   # Workaround for https://github.com/ansible/ansible/issues/41736
   retries: 2
   delay: 3
@@ -46,7 +46,7 @@
 
 # We need to mark as template in a seperate tasks, for some reason
 # it is not possible to clone directly to a template.
-- name: Ensure VM marked as template
+- name: 'Ensure VM marked as template'
   vmware_guest:
     hostname: "{{ hostvars[vm]['vsphere_host'] }}"
     username: "{{ hostvars[vm]['vsphere_username'] }}"
@@ -62,4 +62,4 @@
   when: target_is_template
   loop: "{{ query('inventory_hostnames', '{{ target_group }}' ) }}"
   loop_control:
-    loop_var: vm
+    loop_var: 'vm'

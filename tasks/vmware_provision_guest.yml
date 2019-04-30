@@ -2,10 +2,10 @@
 # Because the cluster and esxi_hostname arguments are mutually exclusive
 # we need to split the actions across multiple playbooks which contain the
 # tasks to run the action on a cluster or single host.
-- name: Run tasks on cluster
-  include_tasks: vmware_provision_guest_cluster.yml
+- name: 'Run tasks on cluster'
+  include_tasks: 'vmware_provision_guest_cluster.yml'
   when: target_esxi_cluster is defined
 
-- name: Run tasks on ESXi host
-  include_tasks: vmware_provision_guest_host.yml
+- name: 'Run tasks on ESXi host'
+  include_tasks: 'vmware_provision_guest_host.yml'
   when: target_esxi_hostname is defined

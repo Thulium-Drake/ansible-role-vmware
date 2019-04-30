@@ -1,0 +1,12 @@
+---
+# This playbook will remove all snapshots for all VMs in the inventory
+- hosts: 'all'
+  gather_facts: 'no'
+  tasks:
+    - import_role:
+        name: 'vmware'
+      vars:
+        target_action: 'snap'
+        target_group: "{{ ansible_limit }}"
+        target_state: 'remove_all'
+      run_once: 'yes'

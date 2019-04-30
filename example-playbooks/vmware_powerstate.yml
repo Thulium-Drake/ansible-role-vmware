@@ -1,0 +1,12 @@
+---
+# This playbook will turn all hosts in the inventory off (ungracefully!)
+- hosts: 'all'
+  gather_facts: 'no'
+  tasks:
+    - import_role:
+        name: 'vmware'
+      vars:
+        target_action: 'powerstate'
+        target_group: "{{ ansible_limit }}"
+        target_state: 'powered-off'
+      run_once: 'yes'

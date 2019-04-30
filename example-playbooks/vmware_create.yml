@@ -1,0 +1,14 @@
+---
+# When present in the inventory, this playbook will create a new VM with the
+# default HW profile as defined by this role
+- hosts: 'new-host.example.com'
+  gather_facts: 'no'
+  tasks:
+    - import_role:
+        name: 'vmware'
+      vars:
+        target_action: 'provision_guest'
+        target_group: "{{ ansible_play_hosts }}"
+        target_state: 'present'
+        target_esxi_hostname: 'esxi.example.com'
+      run_once: 'yes'
