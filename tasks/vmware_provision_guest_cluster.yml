@@ -1,5 +1,6 @@
 ---
-- name: Ensure VM on ESXi cluster
+# Create/edit the VM
+- name: Ensure Virtual Machine status
   vmware_guest:
     hostname: "{{ hostvars[vm]['vsphere_host'] }}"
     username: "{{ hostvars[vm]['vsphere_username'] }}"
@@ -32,56 +33,33 @@
     cdrom: "{{ target_cdrom }}"
     networks: "{{ target_networks }}"
     customization: "{{ target_customization | default('{}') }}"
-    wait_for_ip_address: no
+    wait_for_ip_address: 'no'
   delegate_to: "{{ hostvars[vm]['vsphere_api_host'] }}"
-  when: target_esxi_cluster is defined
   register: deploy
   loop: "{{ query('inventory_hostnames', '{{ target_group }}' ) }}"
   loop_control:
     loop_var: vm
-  retries: 2 # Workaround for https://github.com/ansible/ansible/issues/41736
+  # Workaround for https://github.com/ansible/ansible/issues/41736
+  retries: 2
   delay: 3
   until: not deploy.failed
 
-- name: Ensure VM on ESXi host
+# We need to mark as template in a seperate tasks, for some reason
+# it is not possible to clone directly to a template.
+- name: Ensure VM marked as template
   vmware_guest:
     hostname: "{{ hostvars[vm]['vsphere_host'] }}"
     username: "{{ hostvars[vm]['vsphere_username'] }}"
     password: "{{ hostvars[vm]['vsphere_password'] }}"
     validate_certs: "{{ vsphere_validate_certs }}"
     datacenter: "{{ hostvars[vm]['vsphere_datacenter'] }}"
+    force: "{{ target_force }}"
     name: "{{ vm }}"
-    folder: "{{ target_folder }}"
     state: "{{ target_state }}"
-    esxi_hostname: "{{ target_esxi_hostname }}"
-    template: "{{ target_template }}"
-    disk: "{{ target_disks }}"
-    hardware:
-      memory_mb: "{{ target_ram['mb'] }}"
-      memory_reservation: "{{ target_ram['reserved_mb'] }}"
-      memory_reservation_lock: "{{ target_ram['reservation_lock'] }}"
-      mem_limit: "{{ target_ram['limit_mb'] }}"
-      mem_reservation: "{{ target_ram['reserved_mb'] }}"
-      hotadd_memory: "{{ target_ram['hotadd'] }}"
-      num_cpus: "{{ target_cpu['cpus'] }}"
-      num_cpu_cores_per_socket: "{{ target_cpu['cores_per_socket'] }}"
-      cpu_limit: "{{ target_cpu['limit_mhz'] }}"
-      cpu_reservation: "{{ target_cpu['reserved_mhz'] }}"
-      hotadd_cpu: "{{ target_cpu['hotadd'] }}"
-      hotremove_cpu: "{{ target_cpu['hotremove'] }}"
-      scsi: "{{ target_scsi }}"
-      version: "{{ target_vm_version }}"
-      boot_firmware: "{{ target_boot_firmware }}"
-    cdrom: "{{ target_cdrom }}"
-    networks: "{{ target_networks }}"
-    customization: "{{ target_customization | default('{}') }}"
-    wait_for_ip_address: no
+    is_template: "{{ target_is_template }}"
+    cluster: "{{ target_esxi_cluster }}"
   delegate_to: "{{ hostvars[vm]['vsphere_api_host'] }}"
-  when: target_esxi_hostname is defined
-  register: deploy
+  when: target_is_template
   loop: "{{ query('inventory_hostnames', '{{ target_group }}' ) }}"
   loop_control:
     loop_var: vm
-  retries: 2 # Workaround for https://github.com/ansible/ansible/issues/41736
-  delay: 3
-  until: not deploy.failed

@@ -1,6 +1,4 @@
 ---
-# Variables file for the VMWare manage_guest tasks
-#
 supported_states:
   - powered-off
   - powered-on

@@ -1,6 +1,4 @@
 ---
-### Connection information for vSphere
-
 # The host that has pyVmomi installed
 vsphere_api_host: 'localhost'
 # Your vCenter machine
@@ -13,8 +11,3 @@ vsphere_username: 'administrator@vsphere.local'
 vsphere_password: 'Password1!'
 # Which Datacenter your VM is in
 vsphere_datacenter: 'prod'
-
-# Git repo with VMWare SDK to clone
-vsphere_sdk_url: 'https://github.com/vmware/vsphere-automation-sdk-python'
-# Version of the SDK to clone
-vsphere_sdk_branch: 'master'

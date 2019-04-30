@@ -4,6 +4,7 @@ features:
 
 * Managing VM powerstates
 * Managing VM snapshots
+* Creating/editing VMs and templates (some restrictions may apply!)
 
 For an example setup in which you can use this, please check
 [vmware-example-setup](https://github.com/Thulium-Drake/ansible/tree/master/vmware-example-setup).
@@ -40,7 +41,7 @@ ansible functionality!
 A workaround for that might be to use a 'virtual name' in the inventory:
 
 ```
-vmware-api-host.example.com ansible_host=rhel.example.com
+vmware-api-host.example.com ansible_host=rhel.example.com ansible_python_interpreter=/usr/local/bin/ansible_vmware_python
 ```
 
 ## Multiple vSphere clusters? No problem!
@@ -116,3 +117,42 @@ provided using the playbook used to call it:
  * target_snapshot_name:
    * When creating snapshots: override the name of the snapshot
    * When reverting/deleting snapshots: the target snapshot to delete
+
+# Provision guest
+Supported actions are:
+
+* Creating a new VM based of a template or other VM
+* Deleting a VM
+* Creating a new template based of a VM
+
+The role will NOT prompt for any information required, it can only
+provided using the playbook used to call it. A default hardware profile is
+available in the defaults directory.
+
+To create a new VM, follow these steps:
+
+* Create a vars file with the following information:
+  * Datastore
+  * VM folder
+  * Template (make sure it exists)
+  * Disk setup and disk controller type
+  * Network setup
+  * RAM and CPU setup
+  * VM hardware version and BIOS type
+* Add a new entry into the inventory
+* Run the playbook, for example:
+
+```
+---
+- hosts: new-host.example.com
+  gather_facts: no
+  tasks:
+    - import_role:
+        name: vmware
+      vars:
+        target_action: provision_guest
+        target_group: "{{ ansible_play_hosts }}"
+        target_state: present
+        target_esxi_hostname: esxi.example.com
+      run_once: yes
+```
