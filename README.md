@@ -2,9 +2,9 @@
 This role provides multiple actions for use with VMWare clusters, it currently
 features:
 
-* Managing VM powerstates
-* Managing VM snapshots
-* Creating/editing VMs and templates (some restrictions may apply!)
+* powerstate : Managing VM powerstates
+* provision_guest : Creating/editing VMs and templates (some restrictions may apply!)
+* snap : Managing VM snapshots
 
 For an example setup in which you can use this, please check
 [vmware-example-setup](https://github.com/Thulium-Drake/ansible/tree/master/vmware-example-setup).
@@ -78,7 +78,7 @@ provided using the playbook used to call it:
 
 ## Required variables:
 
- * target_action: one of the vmware_ playbooks that came with this role
+ * target_action: one of the playbooks that came with this role
  * target_group: a comma-separated list of hostgroups that are targeted
  * target_action: one of the states in the supported_states list
 
@@ -108,7 +108,7 @@ provided using the playbook used to call it:
 
 ## Required variables:
 
- * target_action: one of the vmware_ playbooks that came with this role
+ * target_action: one of the playbooks that came with this role
  * target_group: a comma-separated list of hostgroups that are targeted
  * target_state: one of the actions in the supported_states list
 
@@ -131,7 +131,8 @@ available in the defaults directory.
 
 To create a new VM, follow these steps:
 
-* Create a vars file with the following information:
+* Create a vars file with the following information (for details, check
+  the documentation for the vmware_guest module and below):
   * Datastore
   * VM folder
   * Template (make sure it exists)
@@ -156,3 +157,32 @@ To create a new VM, follow these steps:
         target_esxi_hostname: esxi.example.com
       run_once: yes
 ```
+
+## Required variables (most of these have a default value):
+
+ * target_action: one of the playbooks that came with this role
+ * target_group: a comma-separated list of hostgroups that are targeted.
+ * target_state: one of the actions in the supported_states list.
+ * target_esxi_hostname / target_esxi_cluster : The name of the host/cluster
+ where the VM should run on.
+ * target_folder : The folder in which the VM should be placed
+ * target_networks : A dictionary with the network setup. Please consult the
+ vmware_guest documentation.
+ * target_disks : A dictionary with the disk layout. Please consult the
+ vmware_guest documentation.
+ * target_ram : A dictionary with the memory setup. Please consult the
+ defaults file for an example.
+ * target_cpu : A dictionary with the CPU setup. Please consult the
+ defaults file for an example.
+ * target_template: The template to base the VM on, this can be a other VM or
+ a Template.
+
+## Optional variables: 
+
+ * target_force : Ignore any warnings or errors.
+ * target_scsi : The type of disk controller to use.
+ * target_boot_firmware: The BIOS type of the VM.
+ * target_vm_version : The VMWare HW version to use.
+ * target_customization : Any VMWare customization to run on the VM after
+ it's creation. Please consult the vmware_guest documentation for more
+ information.
