@@ -7,7 +7,7 @@ features:
 * snap : Managing VM snapshots
 
 For an example setup in which you can use this, please check
-[vmware-example-setup](https://github.com/Thulium-Drake/ansible/tree/master/vmware-example-setup).
+[vmware-example-setup](https://github.com/Thulium-Drake/ansible-examples/tree/master/vmware-example-setup).
 
 This module can delegate all required actions to a different machine which can
 even be different for each targeted VM. Within this role this host is
