@@ -79,7 +79,7 @@ provided using the playbook used to call it:
 ## Required variables:
 
  * target_action: one of the playbooks that came with this role
- * target_group: a comma-separated list of hostgroups that are targeted
+ * target_group: a comma-separated list of [hostgroups](https://docs.ansible.com/ansible/latest/user_guide/intro_inventory.html#hosts-and-groups) that are targeted
  * target_action: one of the states in the supported_states list
 
 # Snap
@@ -109,7 +109,7 @@ provided using the playbook used to call it:
 ## Required variables:
 
  * target_action: one of the playbooks that came with this role
- * target_group: a comma-separated list of hostgroups that are targeted
+ * target_group: a comma-separated list of [hostgroups](https://docs.ansible.com/ansible/latest/user_guide/intro_inventory.html#hosts-and-groups) that are targeted
  * target_state: one of the actions in the supported_states list
 
 ## Optional variables:
@@ -161,7 +161,7 @@ To create a new VM, follow these steps:
 ## Required variables (most of these have a default value):
 
  * target_action: one of the playbooks that came with this role
- * target_group: a comma-separated list of hostgroups that are targeted.
+ * target_group: a comma-separated list of [hostgroups](https://docs.ansible.com/ansible/latest/user_guide/intro_inventory.html#hosts-and-groups) that are targeted.
  * target_state: one of the actions in the supported_states list.
  * target_esxi_hostname / target_esxi_cluster : The name of the host/cluster
  where the VM should run on.
