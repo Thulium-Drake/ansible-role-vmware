@@ -10,6 +10,6 @@
     name: "{{ vm }}"
   register: 'vm_location'
   delegate_to: "{{ hostvars[vm]['vsphere_api_host'] }}"
-  loop: "{{ query('inventory_hostnames', '{{ target_group }}' ) }}"
+  loop: "{{ query('inventory_hostnames', '{{ ansible_play_hosts }}' ) }}"
   loop_control:
     loop_var: 'vm'

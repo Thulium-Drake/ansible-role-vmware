@@ -13,7 +13,7 @@
       - 'vmc_app_python_sdk'
   register: 'vmware_deps'
   delegate_to: "{{ hostvars[item]['vsphere_api_host'] }}"
-  loop: "{{ query('inventory_hostnames', '{{ target_group }}' ) }}"
+  loop: "{{ query('inventory_hostnames', '{{ ansible_play_hosts }}' ) }}"
 
 - name: 'Install dependencies'
   include_tasks: 'vmware_install.yml'
@@ -27,7 +27,7 @@
 - name: 'Check for complete input, skip is OK'
   fail:
     msg: 'Missing input, please check documentation'
-  when: target_state is not defined or target_group is not defined
+  when: target_state is not defined
 
 - name: 'Check if state is allowed, skip is OK'
   fail:

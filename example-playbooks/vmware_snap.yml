@@ -7,6 +7,5 @@
         name: 'vmware'
       vars:
         target_action: 'snap'
-        target_group: "{{ ansible_play_hosts }}"
         target_state: 'remove_all'
       run_once: 'yes'

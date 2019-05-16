@@ -1,7 +1,5 @@
 ---
-# This playbook will turn all hosts in the inventory off (ungracefully!), limited by
-# specified '--limit' when running this playbook. Omitting that flag will cause an error
-# because ansible_limit will be undefined.
+# This playbook will turn all hosts in the inventory off (ungracefully!)
 - hosts: 'all'
   gather_facts: 'no'
   tasks:
@@ -9,6 +7,5 @@
         name: 'vmware'
       vars:
         target_action: 'powerstate'
-        target_group: "{{ ansible_limit }}"
         target_state: 'powered-off'
       run_once: 'yes'

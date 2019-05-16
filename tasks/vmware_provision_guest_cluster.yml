@@ -36,7 +36,7 @@
     wait_for_ip_address: 'no'
   delegate_to: "{{ hostvars[vm]['vsphere_api_host'] }}"
   register: 'deploy'
-  loop: "{{ query('inventory_hostnames', '{{ target_group }}' ) }}"
+  loop: "{{ query('inventory_hostnames', '{{ ansible_play_hosts }}' ) }}"
   loop_control:
     loop_var: 'vm'
   # Workaround for https://github.com/ansible/ansible/issues/41736
@@ -60,6 +60,6 @@
     cluster: "{{ target_esxi_cluster }}"
   delegate_to: "{{ hostvars[vm]['vsphere_api_host'] }}"
   when: target_is_template
-  loop: "{{ query('inventory_hostnames', '{{ target_group }}' ) }}"
+  loop: "{{ query('inventory_hostnames', '{{ ansible_play_hosts }}' ) }}"
   loop_control:
     loop_var: 'vm'

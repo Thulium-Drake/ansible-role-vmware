@@ -8,7 +8,6 @@
         name: 'vmware'
       vars:
         target_action: 'provision_guest'
-        target_group: "{{ ansible_play_hosts }}"
         target_state: 'present'
         target_esxi_hostname: 'esxi.example.com'
         target_template: 'vm1'
