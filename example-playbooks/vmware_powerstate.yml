@@ -1,5 +1,7 @@
 ---
-# This playbook will turn all hosts in the inventory off (ungracefully!)
+# This playbook will turn all hosts in the inventory off (ungracefully!), limited by
+# specified '--limit' when running this playbook. Omitting that flag will cause an error
+# because ansible_limit will be undefined.
 - hosts: 'all'
   gather_facts: 'no'
   tasks:
