@@ -43,13 +43,13 @@
       loop_control:
         loop_var: 'file'
   when: api_facts.ansible_facts.ansible_distribution == "RedHat"
-  delegate_to: "{{ hostvars[item.item]['vpshere_api_host'] }}"
+  delegate_to: "{{ hostvars[item.item]['vsphere_api_host'] }}"
 
 - name: 'Check Ansible cache directory'
   file:
     state: 'directory'
     path: '/var/cache/ansible/'
-  delegate_to: "{{ hostvars[item.item]['vpshere_api_host'] }}"
+  delegate_to: "{{ hostvars[item.item]['vsphere_api_host'] }}"
 
 - name: 'Clone vSphere Automation SDK repo'
   git:
@@ -57,14 +57,14 @@
     dest: '/var/cache/ansible/vsphere-sdk'
     clone: "yes"
     version: "{{ vsphere_sdk_branch }}"
-  delegate_to: "{{ hostvars[item.item]['vpshere_api_host'] }}"
+  delegate_to: "{{ hostvars[item.item]['vsphere_api_host'] }}"
 
 - name: 'Install vSphere Automation SDK via pip - Debian'
   pip:
     requirements: '/var/cache/ansible/vsphere-sdk/requirements.txt'
     extra_args: '--extra-index-url "file://///var/cache/ansible/vsphere-sdk/lib"'
     state: 'forcereinstall'
-  delegate_to: "{{ hostvars[item.item]['vpshere_api_host'] }}"
+  delegate_to: "{{ hostvars[item.item]['vsphere_api_host'] }}"
   when: api_facts.ansible_facts.ansible_distribution == "Debian"
 
 - block:
@@ -81,5 +81,5 @@
         msg: |
           'This host needs to be reconfigured in the Ansible Inventory to
           continue running. Please check the documentation!'
-  delegate_to: "{{ hostvars[item.item]['vpshere_api_host'] }}"
+  delegate_to: "{{ hostvars[item.item]['vsphere_api_host'] }}"
   when: api_facts.ansible_facts.ansible_distribution == "RedHat"
