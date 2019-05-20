@@ -51,7 +51,14 @@ clusters is as easy as defining these credentials for that specific host/group,
 just like any other variable.
 
 When Ansible runs the playbook, it will lookup all of the required information
-for that specific targeted VM.
+for that specific targeted VM. The variables that will be lookup per host (and
+need to be defined in 'group_vars' are:
+
+* vsphere_api_host
+* vsphere_datacenter
+* vsphere_host
+* vsphere_password
+* vsphere_username
 
 # Powerstate
 Supported states are:
