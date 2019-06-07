@@ -10,7 +10,6 @@
       - 'vmc_client_bindings'
       - 'nsx_python_sdk'
       - 'nsx_policy_python_sdk'
-      - 'vmc_app_python_sdk'
   register: 'vmware_deps'
   delegate_to: "{{ hostvars[item]['vsphere_api_host'] }}"
   loop: "{{ query('inventory_hostnames', '{{ ansible_play_hosts }}' ) }}"
