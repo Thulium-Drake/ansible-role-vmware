@@ -71,7 +71,7 @@
     - name: 'Install vSphere Automation SDK via pip - RedHat'
       pip:
         requirements: '/var/cache/ansible/vsphere-sdk/requirements.txt'
-        extra_args: >
+        extra_args:
           '--extra-index-url "file://///var/cache/ansible/vsphere-sdk/lib"'
         state: 'forcereinstall'
         executable: '/usr/local/bin/ansible_vmware_pip'
