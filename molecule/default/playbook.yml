@@ -1,0 +1,47 @@
+---
+- name: 'Create inventory'
+  hosts: 'all'
+  tasks:
+    - name: 'Add new host'
+      add_host:
+        name: "molecule-{{ ansible_facts['hostname'] }}"
+        group: 'vmware'
+        vsphere_api_host: "{{ ansible_facts['hostname'] }}"
+        vsphere_host: 'vcenter.dom1.lab'
+        vsphere_validate_certs: False
+        vsphere_username: 'administrator@vsphere.local'
+        vsphere_password: 'Password1!'
+        vsphere_datacenter: 'Datacenter'
+      changed_when: False
+
+- name: 'Converge'
+  hosts: 'vmware'
+  gather_facts: False
+  tasks:
+    - name: 'Create VM'
+      import_role:
+        name: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') | basename }}"
+      vars:
+        target_action: 'provision_guest'
+        target_state: 'present'
+        target_esxi_hostname: 'esxi.dom1.lab'
+        target_disks:
+          - size_gb: 1
+            type: 'thin'
+            datastore: "{{ default_datastore }}"
+      run_once: True
+    - name: 'Snap VM'
+      import_role:
+        name: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') | basename }}"
+      vars:
+        target_action: 'snap'
+        target_state: 'present'
+      run_once: True
+    - name: 'Delete VM'
+      import_role:
+        name: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') | basename }}"
+      vars:
+        target_action: 'provision_guest'
+        target_state: 'absent'
+        target_esxi_hostname: 'esxi.dom1.lab'
+      run_once: True
