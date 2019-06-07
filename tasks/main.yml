@@ -17,9 +17,9 @@
 
 - name: 'Install dependencies'
   include_tasks: 'vmware_install.yml'
-  when: 
+  when:
     - item.not_found | length
-    - vsphere_install_sdk == true
+    - vsphere_install_sdk
 
   delegate_to: "{{ hostvars[item.item]['vsphere_api_host'] }}"
   loop: "{{ vmware_deps['results'] }}"
