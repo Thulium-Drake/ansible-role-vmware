@@ -5,14 +5,16 @@ driver:
   name: 'docker'
 lint:
   name: 'yamllint'
+  options:
+    config-file: 'molecule/default/yamllint.yml'
 platforms:
   - name: "${MOLECULE_DISTRO:-debian9}"
     image: "geerlingguy/docker-${MOLECULE_DISTRO:-debian9}-ansible:latest"
     command: '/lib/systemd/systemd'
-    pre_build_image: True
+    pre_build_image: true
     volumes:
       - '/sys/fs/cgroup:/sys/fs/cgroup:ro'
-    privileged: True
+    privileged: true
 provisioner:
   name: 'ansible'
   lint:
