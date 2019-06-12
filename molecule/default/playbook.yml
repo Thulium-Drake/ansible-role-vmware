@@ -7,10 +7,10 @@
         name: "molecule-{{ ansible_facts['hostname'] }}"
         group: 'vmware'
         vsphere_api_host: "{{ ansible_facts['hostname'] }}"
-        vsphere_host: 'vcenter.dom1.lab'
+        vsphere_host: 'vcenter.lab'
         vsphere_validate_certs: False
         vsphere_username: 'administrator@vsphere.local'
-        vsphere_password: 'Password1!'
+        vsphere_password: 'Password1@'
         vsphere_datacenter: 'Datacenter'
       changed_when: False
 

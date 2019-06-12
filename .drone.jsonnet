@@ -4,7 +4,6 @@ local Converge(distro) = {
   commands: [
     "molecule destroy",
     "molecule converge",
-    "molecule verify",
     "molecule destroy",
   ],
   environment:
