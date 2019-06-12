@@ -34,7 +34,6 @@ local Converge(distro) = {
     name: "Test",
     steps: [
       Converge("debian9"),
-      Converge("debian8"),
       Converge("ubuntu1804"),
     ],
     volumes: [
