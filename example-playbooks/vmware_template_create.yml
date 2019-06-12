@@ -2,7 +2,7 @@
 # This playbook will take vm1 and copy it to a new template (this name must
 # also be in the inventory!)
 - hosts: 'deb10-base'
-  gather_facts: 'no'
+  gather_facts: false
   tasks:
     - import_role:
         name: 'vmware'
@@ -12,4 +12,4 @@
         target_esxi_hostname: 'esxi.example.com'
         target_template: 'vm1'
         target_is_template: 'True'
-      run_once: 'yes'
+      run_once: true

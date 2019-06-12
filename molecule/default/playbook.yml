@@ -24,7 +24,7 @@
       vars:
         target_action: 'provision_guest'
         target_state: 'present'
-        target_esxi_hostname: 'esxi.dom1.lab'
+        target_esxi_hostname: 'esxi.lab'
         target_disks:
           - size_gb: 1
             type: 'thin'
@@ -43,5 +43,5 @@
       vars:
         target_action: 'provision_guest'
         target_state: 'absent'
-        target_esxi_hostname: 'esxi.dom1.lab'
+        target_esxi_hostname: 'esxi.lab'
       run_once: true

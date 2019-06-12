@@ -55,7 +55,7 @@
   git:
     repo: "{{ vsphere_sdk_url }}"
     dest: '/var/cache/ansible/vsphere-sdk'
-    clone: "yes"
+    clone: true
     version: "{{ vsphere_sdk_branch }}"
   delegate_to: "{{ hostvars[item.item]['vsphere_api_host'] }}"
 

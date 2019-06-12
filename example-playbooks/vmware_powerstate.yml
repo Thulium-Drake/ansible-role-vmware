@@ -1,11 +1,11 @@
 ---
 # This playbook will turn all hosts in the inventory off (ungracefully!)
 - hosts: 'all'
-  gather_facts: 'no'
+  gather_facts: false
   tasks:
     - import_role:
         name: 'vmware'
       vars:
         target_action: 'powerstate'
         target_state: 'powered-off'
-      run_once: 'yes'
+      run_once: true

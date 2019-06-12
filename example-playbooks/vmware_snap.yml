@@ -1,11 +1,11 @@
 ---
 # This playbook will remove all snapshots for all VMs in the inventory
 - hosts: 'all'
-  gather_facts: 'no'
+  gather_facts: false
   tasks:
     - import_role:
         name: 'vmware'
       vars:
         target_action: 'snap'
         target_state: 'remove_all'
-      run_once: 'yes'
+      run_once: true
