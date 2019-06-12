@@ -13,8 +13,6 @@
     name:
       - 'git'
       - 'python-pip'
-      - 'libxml2-dev'
-      - 'libxslt1-dev'
     state: 'present'
   when: api_facts.ansible_facts.ansible_distribution == "Debian"
   delegate_to: "{{ hostvars[item.item]['vsphere_api_host'] }}"
