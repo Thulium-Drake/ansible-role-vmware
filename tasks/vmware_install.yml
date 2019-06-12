@@ -8,13 +8,13 @@
   register: 'api_facts'
   delegate_to: "{{ hostvars[item.item]['vsphere_api_host'] }}"
 
-- name: 'Install packages - Debian'
+- name: 'Install packages - Debian-like'
   apt:
     name:
       - 'git'
       - 'python-pip'
     state: 'present'
-  when: api_facts.ansible_facts.ansible_distribution == "Debian"
+  when: api_facts.ansible_facts.ansible_os_family == "Debian"
   delegate_to: "{{ hostvars[item.item]['vsphere_api_host'] }}"
 
 - block:
@@ -59,13 +59,13 @@
     version: "{{ vsphere_sdk_branch }}"
   delegate_to: "{{ hostvars[item.item]['vsphere_api_host'] }}"
 
-- name: 'Install vSphere Automation SDK via pip - Debian'
+- name: 'Install vSphere Automation SDK via pip - Debian-like'
   pip:
     requirements: '/var/cache/ansible/vsphere-sdk/requirements.txt'
     extra_args: '--extra-index-url "file://///var/cache/ansible/vsphere-sdk/lib"'
     state: 'forcereinstall'
   delegate_to: "{{ hostvars[item.item]['vsphere_api_host'] }}"
-  when: api_facts.ansible_facts.ansible_distribution == "Debian"
+  when: api_facts.ansible_facts.ansible_os_family == "Debian"
 
 - block:
     - name: 'Install vSphere Automation SDK via pip - RedHat'
