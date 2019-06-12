@@ -55,7 +55,7 @@ local Converge(distro) = {
         image: "quay.io/ansible/molecule",
         commands: [
           "ansible-galaxy login --github-token $$GITHUB_TOKEN",
-          "ansible-galaxy import Thulium-Drake ansible-role-vmware --role-name=adjoin",
+          "ansible-galaxy import Thulium-Drake ansible-role-vmware --role-name=vmware",
         ],
         environment:
           { GITHUB_TOKEN: { from_secret: "github_token" } },
