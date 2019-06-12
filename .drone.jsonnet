@@ -60,6 +60,9 @@ local Converge(distro) = {
           { GITHUB_TOKEN: { from_secret: "github_token" } },
         when:
         {
+          cron: [
+            "weekly-build",
+          ],
           event: [
             "tag",
           ],

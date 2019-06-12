@@ -1,3 +1,5 @@
+[![Build Status](https://drone.element-networks.nl/api/badges/Element-Networks/ansible-role-vmware/status.svg)](https://drone.element-networks.nl/Element-Networks/ansible-role-vmware)
+
 # Ansible toolkit for VMWare
 This role provides multiple actions for use with VMWare clusters, it currently
 features:
