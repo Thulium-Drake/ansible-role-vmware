@@ -58,7 +58,7 @@ local Converge(distro) = {
         ],
         environment:
           { GITHUB_TOKEN: { from_secret: "github_token" } },
-        trigger:
+        when:
         {
           cron: [
             "weekly-build",
