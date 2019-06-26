@@ -87,7 +87,7 @@ provided using the playbook used to call it:
 ## Required variables:
 
  * target_action: one of the playbooks that came with this role
- * target_action: one of the states in the supported_states list
+ * target_action: one of the states in the [supported_states](vars/vmware_powerstate.yml) list
 
 # Snap
 Supported actions are:
@@ -115,7 +115,7 @@ provided using the playbook used to call it:
 ## Required variables:
 
  * target_action: one of the playbooks that came with this role
- * target_state: one of the actions in the supported_states list
+ * target_state: one of the actions in the [supported_states](vars/vmware_snap.yml) list
 
 ## Optional variables:
 
@@ -165,7 +165,7 @@ To create a new VM, follow these steps:
 ## Required variables (most of these have a default value):
 
  * target_action: one of the playbooks that came with this role
- * target_state: one of the actions in the supported_states list.
+ * target_state: one of the actions in the [supported_states](vars/vmware_provision_guest.yml) list.
  * target_esxi_hostname / target_esxi_cluster : The name of the host/cluster
  where the VM should run on.
  * target_folder : The folder in which the VM should be placed
