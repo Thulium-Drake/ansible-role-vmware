@@ -12,7 +12,9 @@
         target_snapshot_name: "ansible_snap_{{ ansible_date_time.date }}"
       delegate_to: "{{ hostvars[item.vm]['vsphere_api_host'] }}"
       loop: "{{ vm_location['results'] }}"
-  when: target_state == "present" and target_snapshot_name is undefined
+  when:
+    - target_state == "present"
+    - target_snapshot_name is undefined or target_snapshot_name == ''
 
 - name: 'Execute snapshot action'
   vmware_guest_snapshot:
