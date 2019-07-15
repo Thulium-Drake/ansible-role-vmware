@@ -14,7 +14,7 @@
       loop: "{{ vm_location['results'] }}"
   when:
     - target_state == "present"
-    - target_snapshot_name is undefined or target_snapshot_name == ''
+    - target_snapshot_name is undefined or target_snapshot_name | length > 0
 
 - name: 'Execute snapshot action'
   vmware_guest_snapshot:
