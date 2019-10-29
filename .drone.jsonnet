@@ -29,23 +29,23 @@ local Converge(distro) = {
       }
     ]
   },
-  {
-    kind: "pipeline",
-    name: "Test",
-    steps: [
-      Converge("debian9"),
-      Converge("ubuntu1804"),
-    ],
-    volumes: [
-      { name: "docker",
-        host: { path: "/var/run/docker.sock" }
-      },
-    ],
-    depends_on: [
-      "Lint",
-    ],
-  },
-  {
+#  {
+#    kind: "pipeline",
+#    name: "Test",
+#    steps: [
+#      Converge("debian9"),
+#      Converge("ubuntu1804"),
+#    ],
+#    volumes: [
+#      { name: "docker",
+#        host: { path: "/var/run/docker.sock" }
+#      },
+#    ],
+#    depends_on: [
+#      "Lint",
+#    ],
+#  },
+#  {
     name: "Publish",
     kind: "pipeline",
     clone:
@@ -63,7 +63,7 @@ local Converge(distro) = {
       },
     ],
     depends_on: [
-      "Test",
+      "Lint",
     ],
   },
 ]
