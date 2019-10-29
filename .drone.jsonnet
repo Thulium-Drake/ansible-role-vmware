@@ -45,7 +45,7 @@ local Converge(distro) = {
 #      "Lint",
 #    ],
 #  },
-#  {
+  {
     name: "Publish",
     kind: "pipeline",
     clone:
