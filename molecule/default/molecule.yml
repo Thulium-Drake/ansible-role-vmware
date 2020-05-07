@@ -4,9 +4,9 @@ dependency:
 driver:
   name: 'docker'
 lint:
-  name: 'yamllint'
-  options:
-    config-file: 'molecule/default/yamllint.yml'
+  set -e
+  yamllint -c molecule/default/yamllint.yml
+  ansible-lint molecule/default/converge.yml
 platforms:
   - name: "vmware-${MOLECULE_DISTRO:-debian9}"
     image: "geerlingguy/docker-${MOLECULE_DISTRO:-debian9}-ansible:latest"
@@ -17,5 +17,5 @@ platforms:
     privileged: true
 provisioner:
   name: 'ansible'
-  lint:
-    name: 'ansible-lint'
+verifier:
+  name: 'ansible'

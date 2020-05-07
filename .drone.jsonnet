@@ -1,9 +1,11 @@
 local Converge(distro) = {
   name: "Converge - "+distro,
-  image: "quay.io/ansible/molecule",
+  image: "registry.element-networks.nl/tools/molecule",
   commands: [
     "molecule destroy",
     "molecule converge",
+    "molecule idempotence",
+    "molecule verify",
     "molecule destroy",
   ],
   environment:
@@ -21,19 +23,29 @@ local Converge(distro) = {
     steps: [
       {
         name: "Lint code",
-        image: "quay.io/ansible/molecule",
+        image: "registry.element-networks.nl/tools/molecule",
         commands: [
           "molecule lint",
           "molecule syntax"
-        ]
+        ],
+        privileged: true,
+        volumes: [
+          { name: "docker", path: "/var/run/docker.sock" },
+        ],
       }
-    ]
+    ],
+    volumes: [
+      { name: "docker",
+        host: { path: "/var/run/docker.sock" }
+      },
+    ],
   },
 #  {
 #    kind: "pipeline",
 #    name: "Test",
 #    steps: [
 #      Converge("debian9"),
+#      Converge("debian10"),
 #      Converge("ubuntu1804"),
 #    ],
 #    volumes: [
@@ -41,6 +53,7 @@ local Converge(distro) = {
 #        host: { path: "/var/run/docker.sock" }
 #      },
 #    ],
+#
 #    depends_on: [
 #      "Lint",
 #    ],
@@ -53,7 +66,7 @@ local Converge(distro) = {
     steps: [
       {
         name: "Ansible Galaxy",
-        image: "quay.io/ansible/molecule",
+        image: "registry.element-networks.nl/tools/molecule",
         commands: [
           "ansible-galaxy login --github-token $$GITHUB_TOKEN",
           "ansible-galaxy import Thulium-Drake ansible-role-vmware --role-name=vmware",
