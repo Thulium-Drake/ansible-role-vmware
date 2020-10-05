@@ -9,7 +9,7 @@ local Converge(distro) = {
     "molecule destroy",
   ],
   environment:
-    { MOLECULE_DISTRO: +distro, },
+    { MOLECULE_DISTRO: distro, },
   privileged: true,
   volumes: [
     { name: "docker", path: "/var/run/docker.sock" },
