@@ -2,7 +2,7 @@
 dependency:
   name: 'galaxy'
 driver:
-  name: 'docker'
+  name: podman
 lint:
   set -e
   yamllint -c molecule/default/yamllint.yml
