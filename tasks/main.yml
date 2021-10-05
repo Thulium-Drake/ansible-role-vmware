@@ -2,7 +2,7 @@
 # This playbook will run all common tasks for the VMware role before running
 # the desired action.
 - name: 'Check dependencies'
-  python_requirements_facts:
+  community.general.python_requirements_info:
     dependencies:
       - 'pyvmomi'
       - 'suds'
