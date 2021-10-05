@@ -1,6 +1,6 @@
 ---
 galaxy_info:
-  author: 'Jeffrey van Pelt'
+  author: 'thulium_drake'
   description: 'An Ansible toolkit for VMWare'
   company:
   role_name: 'vmware'
