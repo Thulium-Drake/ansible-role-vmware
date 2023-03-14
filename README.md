@@ -1,6 +1,8 @@
-[![Build Status](https://drone.element-networks.nl/api/badges/Element-Networks/ansible-role-vmware/status.svg)](https://drone.element-networks.nl/Element-Networks/ansible-role-vmware)
+# This role has been deprecated in favor of the vmware.vmware_rest collection
+While probably still useful, this role should be replaced by the VMWare modules in
+the vmware.vmware_rest collection. Find more information [here](https://github.com/ansible-collections/vmware.vmware_rest)
 
-# Ansible toolkit for VMWare
+## Ansible toolkit for VMWare
 This role provides multiple actions for use with VMWare clusters, it currently
 features:
 
@@ -15,14 +17,14 @@ This module can delegate all required actions to a different machine which can
 even be different for each targeted VM. Within this role this host is
 referred to as the 'API host'
 
-# Usage
+## Usage
 This module requires the use of PyVmomi and the VMWare SDK, this role will
 detect and attempt to install all the required dependencies itself.
 
 For detailed instructions on how to install these dependencies manually, please
 check the example setup.
 
-## RedHat based API hosts need additional setup!
+### RedHat based API hosts need additional setup!
 When running this role on a RedHat system, it will always try to install the
 dependencies (and abort after finishing that). This is due to the fact RedHat
 uses SCL for pip (which we need to get PyVMomi and the other modules), and that
@@ -46,7 +48,7 @@ A workaround for that might be to use a 'virtual name' in the inventory:
 vmware-api-host.example.com ansible_host=rhel.example.com ansible_python_interpreter=/usr/local/bin/ansible_vmware_python
 ```
 
-## Multiple vSphere clusters? No problem!
+### Multiple vSphere clusters? No problem!
 The playbook is configured to lookup the vSphere credentials and information
 in the hostvars of the targeted VM.  So, configuring for multiple VMware
 clusters is as easy as defining these credentials for that specific host/group,
@@ -62,7 +64,7 @@ need to be defined in 'group_vars' are:
 * vsphere_password
 * vsphere_username
 
-# Powerstate
+## Powerstate
 Supported states are:
 
  * Poweron a VM using either VMWare tools or the virtual power button
@@ -84,12 +86,12 @@ provided using the playbook used to call it:
      run_once: yes
 ```
 
-## Required variables:
+### Required variables:
 
  * target_action: one of the playbooks that came with this role
  * target_action: one of the states in the supported_states list
 
-# Snap
+## Snap
 Supported actions are:
 
  * Create snapshots (automatically with a datestamp, or with a provided name)
@@ -112,18 +114,18 @@ provided using the playbook used to call it:
      run_once: yes
 ```
 
-## Required variables:
+### Required variables:
 
  * target_action: one of the playbooks that came with this role
  * target_state: one of the actions in the supported_states list
 
-## Optional variables:
+### Optional variables:
 
  * target_snapshot_name:
    * When creating snapshots: override the name of the snapshot
    * When reverting/deleting snapshots: the target snapshot to delete
 
-# Provision guest
+## Provision guest
 Supported actions are:
 
 * Creating a new VM based of a template or other VM
@@ -162,7 +164,7 @@ To create a new VM, follow these steps:
       run_once: yes
 ```
 
-## Required variables (most of these have a default value):
+### Required variables (most of these have a default value):
 
  * target_action: one of the playbooks that came with this role
  * target_state: one of the actions in the supported_states list.
@@ -180,7 +182,7 @@ To create a new VM, follow these steps:
  * target_template: The template to base the VM on, this can be a other VM or
  a Template.
 
-## Optional variables: 
+### Optional variables: 
 
  * target_force : Ignore any warnings or errors.
  * target_scsi : The type of disk controller to use.
