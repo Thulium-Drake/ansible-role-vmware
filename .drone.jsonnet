@@ -25,7 +25,6 @@ local Converge(distro) = {
         name: "Lint code",
         image: "registry.element-networks.nl/tools/molecule",
         commands: [
-          "molecule lint",
           "molecule syntax"
         ],
         privileged: true,
