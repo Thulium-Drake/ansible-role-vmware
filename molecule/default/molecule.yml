@@ -3,10 +3,6 @@ dependency:
   name: 'galaxy'
 driver:
   name: ${DRIVER_NAME:-docker}
-lint:
-  set -e
-  yamllint -c molecule/default/yamllint.yml
-  ansible-lint molecule/default/converge.yml
 platforms:
   - name: "vmware-${MOLECULE_DISTRO:-debian9}"
     image: "geerlingguy/docker-${MOLECULE_DISTRO:-debian9}-ansible:latest"
