@@ -3,7 +3,7 @@
   hosts: 'all'
   tasks:
     - name: 'Add new host'
-      add_host:
+      ansible.builtin.add_host:
         name: "molecule-{{ ansible_facts['hostname'] }}"
         group: 'vmware'
         vsphere_api_host: "{{ ansible_facts['hostname'] }}"
@@ -19,7 +19,7 @@
   gather_facts: false
   tasks:
     - name: 'Create VM'
-      import_role:
+      ansible.builtin.import_role:
         name: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') | basename }}"
       vars:
         target_action: 'provision_guest'
@@ -29,19 +29,16 @@
           - size_gb: 1
             type: 'thin'
             datastore: "{{ default_datastore }}"
-      run_once: true
     - name: 'Snap VM'
-      import_role:
+      ansible.builtin.import_role:
         name: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') | basename }}"
       vars:
         target_action: 'snap'
         target_state: 'present'
-      run_once: true
     - name: 'Delete VM'
-      import_role:
+      ansible.builtin.import_role:
         name: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') | basename }}"
       vars:
         target_action: 'provision_guest'
         target_state: 'absent'
         target_esxi_hostname: 'esxi.lab'
-      run_once: true

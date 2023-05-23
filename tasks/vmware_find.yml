@@ -2,7 +2,7 @@
 # This playbook is used to locate VMs inside a vSphere datacenter, on which
 # then actions can be run.
 - name: 'Locate VM in vSphere'
-  vmware_guest_find:
+  community.vmware.vmware_guest_find:
     hostname: "{{ hostvars[vm]['vsphere_host'] }}"
     username: "{{ hostvars[vm]['vsphere_username'] }}"
     password: "{{ hostvars[vm]['vsphere_password'] }}"
@@ -10,6 +10,6 @@
     name: "{{ vm }}"
   register: 'vm_location'
   delegate_to: "{{ hostvars[vm]['vsphere_api_host'] }}"
-  loop: "{{ query('inventory_hostnames', '{{ ansible_play_hosts }}' ) }}"
+  loop: "{{ query('inventory_hostnames', '{{ ansible_play_hosts }}') }}"
   loop_control:
     loop_var: 'vm'

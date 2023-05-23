@@ -1,7 +1,7 @@
 ---
 # Create/edit the VM
 - name: 'Ensure Virtual Machine status'
-  vmware_guest:
+  community.vmware.vmware_guest:
     hostname: "{{ hostvars[vm]['vsphere_host'] }}"
     username: "{{ hostvars[vm]['vsphere_username'] }}"
     password: "{{ hostvars[vm]['vsphere_password'] }}"
@@ -36,7 +36,7 @@
     wait_for_ip_address: 'no'
   delegate_to: "{{ hostvars[vm]['vsphere_api_host'] }}"
   register: 'deploy'
-  loop: "{{ query('inventory_hostnames', '{{ ansible_play_hosts }}' ) }}"
+  loop: "{{ query('inventory_hostnames', '{{ ansible_play_hosts }}') }}"
   loop_control:
     loop_var: 'vm'
   # Workaround for https://github.com/ansible/ansible/issues/41736
@@ -47,7 +47,7 @@
 # We need to mark as template in a seperate tasks, for some reason
 # it is not possible to clone directly to a template.
 - name: 'Ensure VM marked as template'
-  vmware_guest:
+  community.vmware.vmware_guest:
     hostname: "{{ hostvars[vm]['vsphere_host'] }}"
     username: "{{ hostvars[vm]['vsphere_username'] }}"
     password: "{{ hostvars[vm]['vsphere_password'] }}"
@@ -60,6 +60,6 @@
     esxi_hostname: "{{ target_esxi_hostname }}"
   delegate_to: "{{ hostvars[vm]['vsphere_api_host'] }}"
   when: target_is_template
-  loop: "{{ query('inventory_hostnames', '{{ ansible_play_hosts }}' ) }}"
+  loop: "{{ query('inventory_hostnames', '{{ ansible_play_hosts }}') }}"
   loop_control:
     loop_var: 'vm'

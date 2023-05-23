@@ -2,7 +2,7 @@
 # This playbook will manage the powerstate of all targeted VMs
 #
 - name: 'Set VM powerstate'
-  vmware_guest_powerstate:
+  community.vmware.vmware_guest_powerstate:
     hostname: "{{ hostvars[item.vm]['vsphere_host'] }}"
     username: "{{ hostvars[item.vm]['vsphere_username'] }}"
     password: "{{ hostvars[item.vm]['vsphere_password'] }}"

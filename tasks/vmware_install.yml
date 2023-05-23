@@ -2,14 +2,14 @@
 # This playbook takes care of installing the correct packages
 #
 - name: 'Gather API host facts'
-  setup:
+  ansible.builtin.setup:
     gather_subset:
       - 'min'
   register: 'api_facts'
   delegate_to: "{{ hostvars[item.item]['vsphere_api_host'] }}"
 
 - name: 'Install packages - Debian-like'
-  apt:
+  ansible.builtin.apt:
     name:
       - 'git'
       - 'python-pip'
@@ -17,42 +17,46 @@
   when: api_facts.ansible_facts.ansible_os_family == "Debian"
   delegate_to: "{{ hostvars[item.item]['vsphere_api_host'] }}"
 
-- block:
+- name: 'Ensure repos - Redhat'
+  when: api_facts.ansible_facts.ansible_distribution == "RedHat"
+  delegate_to: "{{ hostvars[item.item]['vsphere_api_host'] }}"
+  block:
     - name: "Configure extra repo's - Redhat"
-      rhsm_repository:
+      community.general.rhsm_repository:
         name: "rhel-server-rhscl-{{ api_facts.ansible_facts.ansible_distribution_major_version }}-rpms"
         state: 'present'
 
     - name: 'Install packages - RedHat'
-      yum:
+      ansible.builtin.yum:
         name:
           - 'git'
           - 'python27-python-pip'
         state: 'present'
 
     - name: 'Place wrapper scripts for SCL'
-      copy:
+      ansible.builtin.copy:
         dest: "/usr/local/bin/{{ file }}"
         src: "{{ file }}"
-        mode: 0755
         owner: 'root'
         group: 'root'
+        mode: '0755'
       loop:
         - 'ansible_vmware_pip'
         - 'ansible_vmware_python'
       loop_control:
         loop_var: 'file'
-  when: api_facts.ansible_facts.ansible_distribution == "RedHat"
-  delegate_to: "{{ hostvars[item.item]['vsphere_api_host'] }}"
 
 - name: 'Check Ansible cache directory'
-  file:
+  ansible.builtin.file:
     state: 'directory'
     path: '/var/cache/ansible/'
+    owner: 'root'
+    group: 'root'
+    mode: '0755'
   delegate_to: "{{ hostvars[item.item]['vsphere_api_host'] }}"
 
 - name: 'Clone vSphere Automation SDK repo'
-  git:
+  ansible.builtin.git:
     repo: "{{ vsphere_sdk_url }}"
     dest: '/var/cache/ansible/vsphere-sdk'
     clone: true
@@ -60,25 +64,26 @@
   delegate_to: "{{ hostvars[item.item]['vsphere_api_host'] }}"
 
 - name: 'Install vSphere Automation SDK via pip - Debian-like'
-  pip:
+  ansible.builtin.pip:
     requirements: '/var/cache/ansible/vsphere-sdk/requirements.txt'
     extra_args: '--extra-index-url "file://///var/cache/ansible/vsphere-sdk/lib"'
     state: 'forcereinstall'
   delegate_to: "{{ hostvars[item.item]['vsphere_api_host'] }}"
   when: api_facts.ansible_facts.ansible_os_family == "Debian"
 
-- block:
+- name: 'Setup vSphere Automation SDK - RedHat'
+  when: api_facts.ansible_facts.ansible_distribution == "RedHat"
+  delegate_to: "{{ hostvars[item.item]['vsphere_api_host'] }}"
+  block:
     - name: 'Install vSphere Automation SDK via pip - RedHat'
-      pip:
+      ansible.builtin.pip:
         requirements: '/var/cache/ansible/vsphere-sdk/requirements.txt'
         extra_args: '--extra-index-url "file://///var/cache/ansible/vsphere-sdk/lib"'
         state: 'forcereinstall'
         executable: '/usr/local/bin/ansible_vmware_pip'
 
     - name: 'Please reconfigure the API host in the Ansible Inventory'
-      fail:
+      ansible.builtin.fail:
         msg: |
           'This host needs to be reconfigured in the Ansible Inventory to
           continue running. Please check the documentation!'
-  delegate_to: "{{ hostvars[item.item]['vsphere_api_host'] }}"
-  when: api_facts.ansible_facts.ansible_distribution == "RedHat"

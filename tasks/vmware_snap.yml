@@ -1,23 +1,24 @@
 ---
 # This role will manage snapshots of all targeted VMs.
 #
-- block:
+- name: 'Get current snapshot info'
+  when:
+    - target_state == "present"
+    - target_snapshot_name is undefined or (target_snapshot_name | length == 0)
+  block:
     - name: 'Get current date'
-      setup:
+      ansible.builtin.setup:
         filter: 'ansible_date_time'
       delegate_to: "{{ hostvars[item.vm]['vsphere_api_host'] }}"
       loop: "{{ vm_location['results'] }}"
     - name: 'Set snapshot name'
-      set_fact:
+      ansible.builtin.set_fact:
         target_snapshot_name: "ansible_snap_{{ ansible_date_time.date }}"
       delegate_to: "{{ hostvars[item.vm]['vsphere_api_host'] }}"
       loop: "{{ vm_location['results'] }}"
-  when:
-    - target_state == "present"
-    - target_snapshot_name is undefined or (target_snapshot_name | length == 0)
 
 - name: 'Execute snapshot action'
-  vmware_guest_snapshot:
+  community.vmware.vmware_guest_snapshot:
     hostname: "{{ hostvars[item.vm]['vsphere_host'] }}"
     username: "{{ hostvars[item.vm]['vsphere_username'] }}"
     password: "{{ hostvars[item.vm]['vsphere_password'] }}"
