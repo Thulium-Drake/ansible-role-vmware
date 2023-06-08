@@ -1,7 +1,3 @@
-# This role has been deprecated in favor of the vmware.vmware_rest collection
-While probably still useful, this role should be replaced by the VMWare modules in
-the vmware.vmware_rest collection. Find more information [here](https://github.com/ansible-collections/vmware.vmware_rest)
-
 ## Ansible toolkit for VMWare
 This role provides multiple actions for use with VMWare clusters, it currently
 features:
