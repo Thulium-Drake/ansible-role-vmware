@@ -21,22 +21,22 @@
     - item.not_found | length != 0
     - vsphere_install_sdk
 
-- name: "Load {{ target_action }} variables"  # noqa name[template]
-  ansible.builtin.include_vars: "vmware_{{ target_action }}.yml"
+- name: "Load {{ vmware_target_action }} variables"  # noqa name[template]
+  ansible.builtin.include_vars: "vmware_{{ vmware_target_action }}.yml"
 
 - name: 'Check for complete input, skip is OK'
   ansible.builtin.fail:
     msg: 'Missing input, please check documentation'
-  when: target_state is not defined
+  when: vmware_target_state is not defined
 
 - name: 'Check if state is allowed, skip is OK'
   ansible.builtin.fail:
     msg: 'Invalid/unsuppored state!'
-  when: target_state not in supported_states
+  when: vmware_target_state not in supported_states
 
 - name: 'Locate VM in vSphere'
   ansible.builtin.import_tasks: 'vmware_find.yml'
-  when: target_action != 'provision_guest'
+  when: vmware_target_action != 'provision_guest'
 
-- name: "Run {{ target_action }} playbook"  # noqa name[template]
-  ansible.builtin.include_tasks: "vmware_{{ target_action }}.yml"
+- name: "Run {{ vmware_target_action }} playbook"  # noqa name[template]
+  ansible.builtin.include_tasks: "vmware_{{ vmware_target_action }}.yml"

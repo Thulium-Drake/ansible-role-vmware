@@ -9,7 +9,7 @@
     folder: "{{ item.folders[0] }}"
     name: "{{ item.vm }}"
     validate_certs: "{{ vsphere_validate_certs }}"
-    state: "{{ target_state }}"
+    state: "{{ vmware_target_state }}"
     state_change_timeout: "{{ vmware_powerstate_wait }}"
   delegate_to: "{{ hostvars[item.vm]['vsphere_api_host'] }}"
   loop: "{{ vm_location['results'] }}"

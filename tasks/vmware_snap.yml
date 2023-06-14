@@ -3,8 +3,8 @@
 #
 - name: 'Get current snapshot info'
   when:
-    - target_state == "present"
-    - target_snapshot_name is undefined or (target_snapshot_name | length == 0)
+    - vmware_target_state == "present"
+    - vmware_target_snapshot_name is undefined or (vmware_target_snapshot_name | length == 0)
   block:
     - name: 'Get current date'
       ansible.builtin.setup:
@@ -13,7 +13,7 @@
       loop: "{{ vm_location['results'] }}"
     - name: 'Set snapshot name'
       ansible.builtin.set_fact:
-        target_snapshot_name: "ansible_snap_{{ ansible_date_time.date }}"
+        vmware_target_snapshot_name: "ansible_snap_{{ ansible_date_time.date }}"
       delegate_to: "{{ hostvars[item.vm]['vsphere_api_host'] }}"
       loop: "{{ vm_location['results'] }}"
 
@@ -26,7 +26,7 @@
     datacenter: "{{ item.folders[0].split('/')[1] }}"
     name: "{{ item.vm }}"
     validate_certs: "{{ vsphere_validate_certs }}"
-    state: "{{ target_state }}"
-    snapshot_name: "{{ target_snapshot_name | default(default_snapshot_name) }}"
+    state: "{{ vmware_target_state }}"
+    snapshot_name: "{{ vmware_target_snapshot_name | default(default_snapshot_name) }}"
   delegate_to: "{{ hostvars[item.vm]['vsphere_api_host'] }}"
   loop: "{{ vm_location['results'] }}"
