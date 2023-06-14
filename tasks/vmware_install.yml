@@ -14,16 +14,18 @@
       - 'git'
       - 'python-pip'
     state: 'present'
-  when: api_facts.ansible_facts.ansible_os_family == "Debian"
+  when: api_facts['ansible_facts']['os_family'] == "Debian"
   delegate_to: "{{ hostvars[item.item]['vsphere_api_host'] }}"
 
-- name: 'Ensure repos - Redhat'
-  when: api_facts.ansible_facts.ansible_distribution == "RedHat"
+- name: 'Ensure dependencies - Redhat 7 or lower'
+  when:
+    - api_facts['ansible_facts']['os_family'] == "RedHat"
+    - api_facts['ansible_facts']['distribution_major_version'] < 8
   delegate_to: "{{ hostvars[item.item]['vsphere_api_host'] }}"
   block:
     - name: "Configure extra repo's - Redhat"
       community.general.rhsm_repository:
-        name: "rhel-server-rhscl-{{ api_facts.ansible_facts.ansible_distribution_major_version }}-rpms"
+        name: "rhel-server-rhscl-{{ api_facts['ansible_facts']['distribution_major_version'] }}-rpms"
         state: 'present'
 
     - name: 'Install packages - RedHat'
@@ -46,6 +48,18 @@
       loop_control:
         loop_var: 'file'
 
+- name: 'Ensure repos - Redhat 8 or up'
+  when:
+    - api_facts['ansible_facts']['os_family'] == "RedHat"
+    - api_facts['ansible_facts']['distribution_major_version'] >= 8
+  block:
+    - name: 'Ensure packages'
+      ansible.builtin.package:
+        name:
+          - 'git'
+          - 'python3-pip'
+        state: 'present'
+
 - name: 'Check Ansible cache directory'
   ansible.builtin.file:
     state: 'directory'
@@ -63,16 +77,10 @@
     version: "{{ vsphere_sdk_branch }}"
   delegate_to: "{{ hostvars[item.item]['vsphere_api_host'] }}"
 
-- name: 'Install vSphere Automation SDK via pip - Debian-like'
-  ansible.builtin.pip:
-    requirements: '/var/cache/ansible/vsphere-sdk/requirements.txt'
-    extra_args: '--extra-index-url "file://///var/cache/ansible/vsphere-sdk/lib"'
-    state: 'forcereinstall'
-  delegate_to: "{{ hostvars[item.item]['vsphere_api_host'] }}"
-  when: api_facts.ansible_facts.ansible_os_family == "Debian"
-
-- name: 'Setup vSphere Automation SDK - RedHat'
-  when: api_facts.ansible_facts.ansible_distribution == "RedHat"
+- name: 'Setup vSphere Automation SDK - RedHat 7 or lower'
+  when:
+    - api_facts['ansible_facts']['os_family'] == "RedHat"
+    - api_facts['ansible_facts']['distribution_major_version'] < 8
   delegate_to: "{{ hostvars[item.item]['vsphere_api_host'] }}"
   block:
     - name: 'Install vSphere Automation SDK via pip - RedHat'
@@ -87,3 +95,10 @@
         msg: |
           'This host needs to be reconfigured in the Ansible Inventory to
           continue running. Please check the documentation!'
+
+- name: 'Install vSphere Automation SDK via pip'
+  ansible.builtin.pip:
+    requirements: '/var/cache/ansible/vsphere-sdk/requirements.txt'
+    extra_args: '--extra-index-url "file://///var/cache/ansible/vsphere-sdk/lib"'
+    state: 'forcereinstall'
+  delegate_to: "{{ hostvars[item.item]['vsphere_api_host'] }}"

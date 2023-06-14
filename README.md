@@ -20,8 +20,8 @@ detect and attempt to install all the required dependencies itself.
 For detailed instructions on how to install these dependencies manually, please
 check the example setup.
 
-### RedHat based API hosts need additional setup!
-When running this role on a RedHat system, it will always try to install the
+### RedHat 7 based API hosts need additional setup!
+When running this role on a RedHat 7 system, it will always try to install the
 dependencies (and abort after finishing that). This is due to the fact RedHat
 uses SCL for pip (which we need to get PyVMomi and the other modules), and that
 needs to be sourced before running any python commands.
@@ -32,8 +32,6 @@ This has been implemented as follows:
 * The role will exit with an error
 * Update the inventory with a line such as below
 * Run the role again, it will work now
-
-I have yet to find a more integrated/elegant solution for this problem.
 
 NOTE: Please note that changing the Python interpreter might/will break other
 ansible functionality!
