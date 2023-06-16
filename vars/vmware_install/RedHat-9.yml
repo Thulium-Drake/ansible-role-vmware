@@ -4,12 +4,12 @@ vmware_packages:
   - 'python3-cryptography'
   - 'python3-lxml'
   - 'python3-pip'
-  - 'python3-pyOpenSSL'
   - 'python3-requests'
   - 'python3-setuptools'
   - 'python3-six'
 
 vmware_pip_packages:
   - 'pyvmomi'
+  - 'pyOpenSSL'
 
 vmware_pip_executable: '/usr/bin/pip3'
