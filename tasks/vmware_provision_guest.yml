@@ -58,23 +58,3 @@
     boot_order: "{{ vmware_target_boot['order'] | default(omit) }}"
   delegate_to: "{{ vsphere_api_host }}"
   when: vmware_target_state != 'absent'
-
-# We need to mark as template in a seperate tasks, for some reason
-# it is not possible to clone directly to a template.
-- name: 'Ensure VM marked as template'
-  community.vmware.vmware_guest:
-    hostname: "{{ vsphere_host }}"
-    username: "{{ vsphere_username }}"
-    password: "{{ vsphere_password }}"
-    validate_certs: "{{ vsphere_validate_certs }}"
-    datacenter: "{{ vsphere_datacenter }}"
-    force: "{{ vmware_target_force }}"
-    name: "{{ inventory_hostname }}"
-    state: "{{ vmware_target_state }}"
-    is_template: "{{ vmware_target_is_template }}"
-    esxi_hostname: "{{ vmware_target_esxi_hostname | default(omit, true) }}"
-    cluster: "{{ vmware_target_esxi_cluster | default(omit, true) }}"
-  delegate_to: "{{ vsphere_api_host }}"
-  when:
-    - vmware_target_is_template
-    - vmware_target_state != 'absent'

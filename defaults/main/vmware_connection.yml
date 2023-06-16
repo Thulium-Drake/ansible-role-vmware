@@ -1,13 +1,18 @@
 ---
 # The host that has pyVmomi installed
 vsphere_api_host: 'localhost'
+
 # Your vCenter machine
 vsphere_host: 'vcenter-prd.example.com'
+
 # Whether to check vSphere's SSL cert or not
-vsphere_validate_certs: 'no'
+vsphere_validate_certs: false
+
 # A useraccount with sufficient privileges
 vsphere_username: 'administrator@vsphere.local'
+
 # The password for the above user
 vsphere_password: 'Password1!'
+
 # Which Datacenter your VM is in
 vsphere_datacenter: 'prod'

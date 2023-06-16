@@ -1,6 +1,7 @@
 ---
 # Git repo with VMWare SDK to clone
 vsphere_sdk_url: 'https://github.com/vmware/vsphere-automation-sdk-python'
+
 # Version of the SDK to clone
 vsphere_sdk_branch: 'master'
 

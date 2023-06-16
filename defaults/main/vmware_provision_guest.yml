@@ -2,7 +2,7 @@
 ### Defaults for manage_guest
 
 # Override any warnings, useful when removing poweredon VMs
-vmware_target_force: 'False'
+vmware_target_force: false
 
 # Cluster or ESXi host to use, use only one!
 vmware_target_esxi_hostname: ''
@@ -16,9 +16,6 @@ vmware_target_folder: '/'
 
 # Name of the template to create the VM from, leave empty to create blank VM
 vmware_target_template: ''
-
-# Is the target system we are creating a template?
-vmware_target_is_template: 'False'
 
 #### Default storage profile (HDD and CDROM)
 vmware_target_disks:
