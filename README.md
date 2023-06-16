@@ -21,31 +21,9 @@ detect and attempt to install all the required dependencies itself.
 For detailed instructions on how to install these dependencies manually, please
 check the example setup.
 
-### RedHat 7 based API hosts need additional setup!
-When running this role on a RedHat 7 system, it will always try to install the
-dependencies (and abort after finishing that). This is due to the fact RedHat
-uses SCL for pip (which we need to get PyVMomi and the other modules), and that
-needs to be sourced before running any python commands.
-
-This has been implemented as follows:
-
-* Run the role, it will install all required software
-* The role will exit with an error
-* Update the inventory with a line such as below
-* Run the role again, it will work now
-
-NOTE: Please note that changing the Python interpreter might/will break other
-ansible functionality!
-
-A workaround for that might be to use a 'virtual name' in the inventory:
-
-```
-vmware-api-host.example.com ansible_host=rhel.example.com ansible_python_interpreter=/usr/local/bin/ansible_vmware_python
-```
-
 ### Multiple vSphere clusters? No problem!
-The playbook is configured to lookup the vSphere credentials and information
-in the hostvars of the targeted VM.  So, configuring for multiple VMware
+The playbook is configured to use the vSphere credentials and information
+in the hostvars of the targeted VM. So, configuring for multiple VMware
 clusters is as easy as defining these credentials for that specific host/group,
 just like any other variable.
 

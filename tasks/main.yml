@@ -24,6 +24,7 @@
 
 - name: 'Install dependencies'
   ansible.builtin.include_tasks: 'vmware_install.yml'
+  run_once: true
   when:
     - vmware_deps['not_found'] | length != 0
     - vsphere_install_sdk

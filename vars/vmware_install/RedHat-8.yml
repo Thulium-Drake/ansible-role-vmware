@@ -1,0 +1,15 @@
+---
+vmware_packages:
+  - 'git'
+  - 'python39-cryptography'
+  - 'python39-lxml'
+  - 'python39-pip'
+  - 'python39-requests'
+  - 'python39-setuptools'
+  - 'python39-six'
+
+vmware_pip_packages:
+  - 'pyOpenSSL'
+  - 'pyvmomi'
+
+vmware_pip_executable: '/usr/bin/pip3.9'

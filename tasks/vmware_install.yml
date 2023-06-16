@@ -15,74 +15,22 @@
       files:
         - "{{ api_facts['ansible_facts']['ansible_os_family'] }}-{{ api_facts['ansible_facts']['ansible_distribution_major_version'] }}.yml"
         - "{{ api_facts['ansible_facts']['ansible_os_family'] }}.yml"
-        - 'default.yml'
       paths:
         - 'vars/vmware_install'
 
-- name: 'Install packages - Debian-like'
-  ansible.builtin.apt:
-    name:
-      - 'git'
-      - 'python-pip'
+- name: 'Ensure packages'
+  ansible.builtin.package:
+    name: "{{ vmware_packages }}"
     state: 'present'
-  when: api_facts['ansible_facts']['ansible_os_family'] == "Debian"
   delegate_to: "{{ vsphere_api_host }}"
 
-- name: 'Ensure dependencies - Redhat 7 or lower'
-  when:
-    - api_facts['ansible_facts']['ansible_os_family'] == "RedHat"
-    - api_facts['ansible_facts']['ansible_distribution_major_version'] | int < 8
+- name: 'Ensure extra dependencies from Pip'
+  ansible.builtin.pip:
+    name: "{{ vmware_pip_packages }}"
+    state: 'present'
+    executable: "{{ vmware_pip_executable }}"
   delegate_to: "{{ vsphere_api_host }}"
-  block:
-    - name: "Configure extra repo's - Redhat"
-      community.general.rhsm_repository:
-        name: "rhel-server-rhscl-{{ api_facts['ansible_facts']['ansible_distribution_major_version'] }}-rpms"
-        state: 'present'
-
-    - name: 'Install packages - RedHat'
-      ansible.builtin.yum:
-        name:
-          - 'git'
-          - 'python27-python-pip'
-        state: 'present'
-
-    - name: 'Place wrapper scripts for SCL'
-      ansible.builtin.copy:
-        dest: "/usr/local/bin/{{ file }}"
-        src: "{{ file }}"
-        owner: 'root'
-        group: 'root'
-        mode: '0755'
-      loop:
-        - 'ansible_vmware_pip'
-        - 'ansible_vmware_python'
-      loop_control:
-        loop_var: 'file'
-
-- name: 'Ensure depencendies - Redhat 8 or up'
-  when:
-    - api_facts['ansible_facts']['ansible_os_family'] == "RedHat"
-    - api_facts['ansible_facts']['ansible_distribution_major_version'] | int >= 8
-  delegate_to: "{{ vsphere_api_host }}"
-  block:
-    - name: 'Ensure packages'
-      ansible.builtin.package:
-        name:
-          - 'git'
-          - 'python3-cryptography'
-          - 'python3-lxml'
-          - 'python3-pip'
-          - 'python3-pyOpenSSL'
-          - 'python3-requests'
-          - 'python3-setuptools'
-          - 'python3-six'
-        state: 'present'
-
-    - name: 'Ensure extra dependencies from Pip'
-      ansible.builtin.pip:
-        name: 'pyvmomi'
-        state: 'forcereinstall'
-        executable: "{{ vmware_pip_executable }}"
+  when: vmware_pip_packages | length > 0
 
 - name: 'Check Ansible cache directory'
   ansible.builtin.file:
@@ -108,15 +56,3 @@
     state: 'forcereinstall'
     executable: "{{ vmware_pip_executable }}"
   delegate_to: "{{ vsphere_api_host }}"
-
-- name: 'Notify extra config steps - RedHat 7 or lower'
-  when:
-    - api_facts['ansible_facts']['ansible_os_family'] == "RedHat"
-    - api_facts['ansible_facts']['ansible_distribution_major_version'] | int < 8
-  delegate_to: "{{ vsphere_api_host }}"
-  block:
-    - name: 'Please reconfigure the API host in the Ansible Inventory'
-      ansible.builtin.fail:
-        msg: |
-          'This host needs to be reconfigured in the Ansible Inventory to
-          continue running. Please check the documentation!'

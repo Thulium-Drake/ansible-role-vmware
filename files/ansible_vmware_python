@@ -1,5 +1,0 @@
-#!/bin/bash
-# This file is part of Ansible VMWare
-. /opt/rh/python27/enable
-exec python "$@"
-
