@@ -6,12 +6,13 @@ features:
 * provision_guest : Creating/editing VMs and templates (some restrictions may apply!)
 * snap : Managing VM snapshots
 
-For an example setup in which you can use this, please check
-[vmware-example-setup](https://github.com/Thulium-Drake/ansible-examples/tree/master/vmware-example-setup).
-
-This module can delegate all required actions to a different machine which can
+This role can delegate all required actions to a different machine which can
 even be different for each targeted VM. Within this role this host is
 referred to as the 'API host'
+
+For tasks that need to locate VMs within your environment an extra variable is made available with
+all information of the targeted VMs. This can allow for using VMWare attributes in for example
+snapshot names. You can find this information in the 'vm_info' variable.
 
 ## Usage
 This module requires the use of PyVmomi and the VMWare SDK, this role will
@@ -176,7 +177,7 @@ To create a new VM, follow these steps:
  * target_template: The template to base the VM on, this can be a other VM or
  a Template.
 
-### Optional variables: 
+### Optional variables:
 
  * target_force : Ignore any warnings or errors.
  * target_scsi : The type of disk controller to use.
