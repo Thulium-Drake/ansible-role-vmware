@@ -28,6 +28,8 @@ the vSphere SDK, you need to change the ```ansible_python_interpreter``` dependi
 * vSphere 7 SDK requires Python 3.3+
 * vSphere 8 SDK requires Python 3.8+, which requires a custom ```ansible_python_interpreter``` on RHEL8
 
+This role has been prepared with support for vSphere 7, but this has not been tested.
+
 ### Multiple vSphere clusters? No problem!
 The playbook is configured to use the vSphere credentials and information
 in the hostvars of the targeted VM. So, configuring for multiple VMware
