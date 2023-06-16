@@ -57,6 +57,7 @@
     secure_boot_enabled: "{{ vmware_target_boot['secure_boot'] | default(omit) }}"
     boot_order: "{{ vmware_target_boot['order'] | default(omit) }}"
   delegate_to: "{{ vsphere_api_host }}"
+  when: vmware_target_state != 'absent'
 
 # We need to mark as template in a seperate tasks, for some reason
 # it is not possible to clone directly to a template.
@@ -74,4 +75,6 @@
     esxi_hostname: "{{ vmware_target_esxi_hostname | default(omit, true) }}"
     cluster: "{{ vmware_target_esxi_cluster | default(omit, true) }}"
   delegate_to: "{{ vsphere_api_host }}"
-  when: vmware_target_is_template
+  when:
+    - vmware_target_is_template
+    - vmware_target_state != 'absent'
