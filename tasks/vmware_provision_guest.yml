@@ -2,22 +2,22 @@
 # Create/edit the VM
 - name: 'Ensure Virtual Machine status'
   community.vmware.vmware_guest:
-    hostname: "{{ hostvars[vm]['vsphere_host'] }}"
-    username: "{{ hostvars[vm]['vsphere_username'] }}"
-    password: "{{ hostvars[vm]['vsphere_password'] }}"
+    hostname: "{{ vsphere_host }}"
+    username: "{{ vsphere_username }}"
+    password: "{{ vsphere_password }}"
     validate_certs: "{{ vsphere_validate_certs }}"
-    datacenter: "{{ hostvars[vm]['vsphere_datacenter'] }}"
+    datacenter: "{{ vsphere_datacenter }}"
     force: "{{ vmware_target_force }}"
-    name: "{{ vm }}"
+    name: "{{ inventory_hostname }}"
     folder: "{{ vmware_target_folder }}"
     state: "{{ vmware_target_state }}"
-    esxi_hostname: "{{ vmware_target_esxi_hostname | default(omit) }}"
-    cluster: "{{ vmware_target_esxi_cluster | default(omit) }}"
-    template: "{{ vmware_target_template }}"
+    esxi_hostname: "{{ vmware_target_esxi_hostname | default(omit, true) }}"
+    cluster: "{{ vmware_target_esxi_cluster | default(omit, true) }}"
+    template: "{{ vmware_target_template | default(omit, true) }}"
     disk: "{{ vmware_target_disks }}"
+    guest_id: "{{ vmware_target_guest_os }}"
     hardware:
       memory_mb: "{{ vmware_target_ram['mb'] }}"
-      memory_reservation: "{{ vmware_target_ram['reserved_mb'] }}"
       memory_reservation_lock: "{{ vmware_target_ram['reservation_lock'] }}"
       mem_limit: "{{ vmware_target_ram['limit_mb'] }}"
       mem_reservation: "{{ vmware_target_ram['reserved_mb'] }}"
@@ -30,38 +30,48 @@
       hotremove_cpu: "{{ vmware_target_cpu['hotremove'] }}"
       scsi: "{{ vmware_target_scsi }}"
       version: "{{ vmware_target_vm_version }}"
-      boot_firmware: "{{ vmware_target_boot_firmware }}"
+      boot_firmware: "{{ vmware_target_boot['firmware'] }}"
     cdrom: "{{ vmware_target_cdrom }}"
     networks: "{{ vmware_target_networks }}"
     customization: "{{ vmware_target_customization | default('{}') }}"
     wait_for_ip_address: 'no'
-  delegate_to: "{{ hostvars[vm]['vsphere_api_host'] }}"
+  delegate_to: "{{ vsphere_api_host }}"
   register: 'deploy'
-  loop: "{{ query('inventory_hostnames', '{{ ansible_play_hosts }}') }}"
-  loop_control:
-    loop_var: 'vm'
   # Workaround for https://github.com/ansible/ansible/issues/41736
   retries: 2
   delay: 3
-  until: not deploy.failed
+  until: not deploy['failed']
+
+- name: 'Ensure VM boot settings'
+  community.vmware.vmware_guest_boot_manager:
+    hostname: "{{ vsphere_host }}"
+    username: "{{ vsphere_username }}"
+    password: "{{ vsphere_password }}"
+    validate_certs: "{{ vsphere_validate_certs }}"
+    name: "{{ inventory_hostname }}"
+    boot_delay: "{{ vmware_target_boot['delay'] | default(omit) }}"
+    enter_bios_setup: "{{ vmware_target_boot['enter_setup'] | default(omit) }}"
+    boot_retry_enabled: "{{ vmware_target_boot['retry_enabled'] | default(omit) }}"
+    boot_retry_delay: "{{ vmware_target_boot['retry_delay'] | default(omit) }}"
+    boot_firmware: "{{ vmware_target_boot['firmware'] | default(omit) }}"
+    secure_boot_enabled: "{{ vmware_target_boot['secure_boot'] | default(omit) }}"
+    boot_order: "{{ vmware_target_boot['order'] | default(omit) }}"
+  delegate_to: "{{ vsphere_api_host }}"
 
 # We need to mark as template in a seperate tasks, for some reason
 # it is not possible to clone directly to a template.
 - name: 'Ensure VM marked as template'
   community.vmware.vmware_guest:
-    hostname: "{{ hostvars[vm]['vsphere_host'] }}"
-    username: "{{ hostvars[vm]['vsphere_username'] }}"
-    password: "{{ hostvars[vm]['vsphere_password'] }}"
+    hostname: "{{ vsphere_host }}"
+    username: "{{ vsphere_username }}"
+    password: "{{ vsphere_password }}"
     validate_certs: "{{ vsphere_validate_certs }}"
-    datacenter: "{{ hostvars[vm]['vsphere_datacenter'] }}"
+    datacenter: "{{ vsphere_datacenter }}"
     force: "{{ vmware_target_force }}"
-    name: "{{ vm }}"
+    name: "{{ inventory_hostname }}"
     state: "{{ vmware_target_state }}"
     is_template: "{{ vmware_target_is_template }}"
-    esxi_hostname: "{{ vmware_target_esxi_hostname | default(omit) }}"
-    cluster: "{{ vmware_target_esxi_cluster | default(omit) }}"
-  delegate_to: "{{ hostvars[vm]['vsphere_api_host'] }}"
+    esxi_hostname: "{{ vmware_target_esxi_hostname | default(omit, true) }}"
+    cluster: "{{ vmware_target_esxi_cluster | default(omit, true) }}"
+  delegate_to: "{{ vsphere_api_host }}"
   when: vmware_target_is_template
-  loop: "{{ query('inventory_hostnames', '{{ ansible_play_hosts }}') }}"
-  loop_control:
-    loop_var: 'vm'

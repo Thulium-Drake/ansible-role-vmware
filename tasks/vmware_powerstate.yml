@@ -3,13 +3,13 @@
 #
 - name: 'Set VM powerstate'
   community.vmware.vmware_guest_powerstate:
-    hostname: "{{ hostvars[item.vm]['vsphere_host'] }}"
-    username: "{{ hostvars[item.vm]['vsphere_username'] }}"
-    password: "{{ hostvars[item.vm]['vsphere_password'] }}"
+    hostname: "{{ vsphere_host }}"
+    username: "{{ vsphere_username }}"
+    password: "{{ vsphere_password }}"
     folder: "{{ item.folders[0] }}"
-    name: "{{ item.vm }}"
+    name: "{{ item['vm'] }}"
     validate_certs: "{{ vsphere_validate_certs }}"
     state: "{{ vmware_target_state }}"
     state_change_timeout: "{{ vmware_powerstate_wait }}"
-  delegate_to: "{{ hostvars[item.vm]['vsphere_api_host'] }}"
+  delegate_to: "{{ vsphere_api_host }}"
   loop: "{{ vm_location['results'] }}"

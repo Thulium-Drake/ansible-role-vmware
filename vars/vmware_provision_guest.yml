@@ -1,5 +1,5 @@
 ---
-supported_states:
+vmware_supported_states:
   - powered-off
   - powered-on
   - reboot-guest

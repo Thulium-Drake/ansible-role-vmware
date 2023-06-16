@@ -3,13 +3,10 @@
 # then actions can be run.
 - name: 'Locate VM in vSphere'
   community.vmware.vmware_guest_find:
-    hostname: "{{ hostvars[vm]['vsphere_host'] }}"
-    username: "{{ hostvars[vm]['vsphere_username'] }}"
-    password: "{{ hostvars[vm]['vsphere_password'] }}"
+    hostname: "{{ vsphere_host }}"
+    username: "{{ vsphere_username }}"
+    password: "{{ vsphere_password }}"
     validate_certs: "{{ vsphere_validate_certs }}"
-    name: "{{ vm }}"
+    name: "{{ inventory_hostname }}"
   register: 'vm_location'
-  delegate_to: "{{ hostvars[vm]['vsphere_api_host'] }}"
-  loop: "{{ query('inventory_hostnames', '{{ ansible_play_hosts }}') }}"
-  loop_control:
-    loop_var: 'vm'
+  delegate_to: "{{ vsphere_api_host }}"

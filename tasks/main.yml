@@ -4,35 +4,39 @@
 - name: 'Check dependencies'
   community.general.python_requirements_info:
     dependencies:
+      - 'lxml'
       - 'pyvmomi'
-      - 'suds'
-      - 'vapi_client_bindings'
-      - 'vmc_client_bindings'
-      - 'nsx_python_sdk'
-      - 'nsx_policy_python_sdk'
+      - 'six'
+      - 'requests'
+      - 'pyopenssl'
+      - 'cryptography'
+      - 'setuptools'
+      - 'vcenter-bindings'
+      - 'vmc-client-bindings'
+      - 'nsx-python-sdk'
+      - 'nsx-policy-python-sdk'
+      - 'nsx-vmc-policy-python-sdk'
+      - 'nsx-vmc-aws-integration-python-sdk'
+      - 'vmc-draas-client-bindings'
   register: 'vmware_deps'
-  delegate_to: "{{ hostvars[item]['vsphere_api_host'] }}"
-  loop: "{{ query('inventory_hostnames', '{{ ansible_play_hosts }}') }}"
+  delegate_to: "{{ vsphere_api_host }}"
+  run_once: true
 
 - name: 'Install dependencies'
   ansible.builtin.include_tasks: 'vmware_install.yml'
-  loop: "{{ vmware_deps['results'] }}"
   when:
-    - item.not_found | length != 0
+    - vmware_deps['not_found'] | length != 0
     - vsphere_install_sdk
 
 - name: "Load {{ vmware_target_action }} variables"  # noqa name[template]
   ansible.builtin.include_vars: "vmware_{{ vmware_target_action }}.yml"
 
-- name: 'Check for complete input, skip is OK'
-  ansible.builtin.fail:
-    msg: 'Missing input, please check documentation'
-  when: vmware_target_state is not defined
-
-- name: 'Check if state is allowed, skip is OK'
-  ansible.builtin.fail:
-    msg: 'Invalid/unsuppored state!'
-  when: vmware_target_state not in supported_states
+- name: 'Check for complete input'
+  ansible.builtin.assert:
+    that:
+      - vmware_target_state is defined
+      - vmware_target_state in vmware_supported_states
+    fail_msg: 'Missing/incorrect input, please check documentation'
 
 - name: 'Locate VM in vSphere'
   ansible.builtin.import_tasks: 'vmware_find.yml'

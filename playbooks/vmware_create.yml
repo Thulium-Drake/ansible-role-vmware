@@ -1,13 +1,30 @@
 ---
-# When present in the inventory, this playbook will create a new VM with the
-# default HW profile as defined by this role
-- hosts: 'new-host.example.com'
+- name: 'Get info'
+  hosts: 'localhost'
+  gather_facts: false
+  vars_prompt:
+    - name: 'input_hosts'
+      prompt: "Which hosts do you want to create? Split with comma's"
+      default: 'vm1.example.com,vm2.example.com'
+      private: false
+  tasks:
+    - name: 'Add input to ad-hoc inventory'
+      ansible.builtin.add_host:
+        name: "{{ host }}"
+        groups:
+          - 'vmware_create'
+      loop: "{{ input_hosts.split(',') }}"
+      loop_control:
+        loop_var: 'host'
+      delegate_to: 'localhost'
+
+- name: 'Create hosts'
+  hosts: 'vmware_create'
   gather_facts: false
   tasks:
-    - import_role:
+    - name: 'Ensure host created'
+      ansible.builtin.import_role:
         name: 'vmware'
-      vars:
-        target_action: 'provision_guest'
-        target_state: 'present'
-        target_esxi_hostname: 'esxi.example.com'
-      run_once: true
+      vars:  # You can put other variables here, or put them in the inventory
+        vmware_target_action: 'provision_guest'
+        vmware_target_state: 'present'

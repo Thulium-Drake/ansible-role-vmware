@@ -4,14 +4,18 @@
 # Override any warnings, useful when removing poweredon VMs
 vmware_target_force: 'False'
 
+# Cluster or ESXi host to use, use only one!
+vmware_target_esxi_hostname: ''
+vmware_target_esxi_cluster: ''
+
 # Default datastore to use
 vmware_default_datastore: 'datastore1'
 
 # Default folder in which to place the VM
 vmware_target_folder: '/'
 
-# Name of the template to create the VM from
-vmware_target_template: 'template1'
+# Name of the template to create the VM from, leave empty to create blank VM
+vmware_target_template: ''
 
 # Is the target system we are creating a template?
 vmware_target_is_template: 'False'
@@ -22,8 +26,16 @@ vmware_target_disks:
     type: 'thin'
     datastore: "{{ vmware_default_datastore }}"
 vmware_target_cdrom:
-  type: 'iso'
-  iso_path: "[{{ vmware_default_datastore }}] livecd.iso"
+  - controller_number: 0
+    unit_number: 0
+    state: 'present'
+    type: 'iso'
+    iso_path: "[{{ vmware_default_datastore }}] livecd.iso"
+
+#### Guest OS
+# Check the link below for a full list
+# https://developer.vmware.com/apis/358/doc/vim.vm.GuestOsDescriptor.GuestOsIdentifier.html
+vmware_target_guest_os: 'other3xLinux64Guest'
 
 #### Default Network profile
 vmware_target_networks:
@@ -45,4 +57,10 @@ vmware_target_cpu:
   hotremove: 'False'          # Remove CPUs from this VM while it's running
 vmware_target_scsi: 'paravirtual'    # Type of HDD controller to use
 vmware_target_vm_version: 19         # VMWare Hardware version
-vmware_target_boot_firmware: 'efi'   # VM BIOS type
+vmware_target_boot:
+  delay: 0
+  firmware: 'bios'
+  boot_order:
+    - 'cdrom'
+    - 'ethernet'
+    - 'disk'
