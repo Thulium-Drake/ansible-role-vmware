@@ -1,0 +1,32 @@
+---
+- name: 'Get info'
+  hosts: 'localhost'
+  gather_facts: false
+  vars_prompt:
+    - name: 'input_hosts'
+      prompt: "Which hosts do you want to create? Split with comma's"
+      default: 'vm1.example.com,vm2.example.com'
+      private: false
+  tasks:
+    - name: 'Add input to ad-hoc inventory'
+      ansible.builtin.add_host:
+        name: "{{ host }}"
+        groups:
+          - 'vmware_create'
+      loop: "{{ input_hosts.split(',') }}"
+      loop_control:
+        loop_var: 'host'
+      delegate_to: 'localhost'
+
+- name: 'Create hosts'
+  hosts: 'vmware_create'
+  gather_facts: false
+  vars:
+    ansible_python_interpreter: "{{ (vsphere_version is version('8', 'ge')) | ternary('/usr/bin/python3.9', '/usr/bin/python3') }}"
+  tasks:
+    - name: 'Ensure host created'
+      ansible.builtin.import_role:
+        name: 'vmware'
+      vars:  # You can put other variables here, or put them in the inventory
+        vmware_target_action: 'provision_guest'
+        vmware_target_state: 'present'

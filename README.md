@@ -21,6 +21,13 @@ detect and attempt to install all the required dependencies itself.
 For detailed instructions on how to install these dependencies manually, please
 check the example setup.
 
+### Note on using it with RHEL 8
+This role will work perfectly on both RHEL8, however, due to the required Python version for
+the vSphere SDK, you need to change the ```ansible_python_interpreter``` depending on the vSphere major version. Please see the example playbooks for a means to detect it.
+
+* vSphere 7 SDK requires Python 3.3+
+* vSphere 8 SDK requires Python 3.8+, which requires a custom ```ansible_python_interpreter``` on RHEL8
+
 ### Multiple vSphere clusters? No problem!
 The playbook is configured to use the vSphere credentials and information
 in the hostvars of the targeted VM. So, configuring for multiple VMware

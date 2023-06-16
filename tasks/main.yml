@@ -18,6 +18,7 @@
       - 'nsx-vmc-policy-python-sdk'
       - 'nsx-vmc-aws-integration-python-sdk'
       - 'vmc-draas-client-bindings'
+      - 'vsphere-automation-sdk'
   register: 'vmware_deps'
   delegate_to: "{{ vsphere_api_host }}"
   run_once: true

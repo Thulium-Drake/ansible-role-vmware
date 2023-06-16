@@ -1,0 +1,14 @@
+---
+# This playbook will turn all hosts in the inventory off (ungracefully!)
+- name: 'Ensure VM powerstate'
+  hosts: 'all'
+  gather_facts: false
+  vars:
+    ansible_python_interpreter: "{{ (vsphere_version is version('8', 'ge')) | ternary('/usr/bin/pyth  on3.9', '/usr/bin/python3') }}"
+  tasks:
+    - name: 'Ensure powerstate'
+      ansible.builtin.import_role:
+        name: 'vmware'
+      vars:
+        vmware_target_action: 'powerstate'
+        vmware_target_state: 'powered-off'
