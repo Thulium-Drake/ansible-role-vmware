@@ -10,23 +10,20 @@
       ansible.builtin.setup:
         filter: 'ansible_date_time'
       delegate_to: "{{ vsphere_api_host }}"
-      loop: "{{ vm_location['results'] }}"
     - name: 'Set snapshot name'
       ansible.builtin.set_fact:
-        vmware_target_snapshot_name: "ansible_snap_{{ ansible_date_time['date'] }}"
+        vmware_target_snapshot_name: "ansible_snap_{{ ansible_facts['date_time']['date'] }}"
       delegate_to: "{{ vsphere_api_host }}"
-      loop: "{{ vm_location['results'] }}"
 
 - name: 'Execute snapshot action'
   community.vmware.vmware_guest_snapshot:
     hostname: "{{ vsphere_host }}"
     username: "{{ vsphere_username }}"
     password: "{{ vsphere_password }}"
-    folder: "{{ item.folders[0] }}"
-    datacenter: "{{ item.folders[0].split('/')[1] }}"
-    name: "{{ item['vm'] }}"
+    folder: "{{ vm_location['folders'][0] }}"
+    datacenter: "{{ vm_location['folders'][0].split('/')[1] }}"
+    name: "{{ inventory_hostname }}"
     validate_certs: "{{ vsphere_validate_certs }}"
     state: "{{ vmware_target_state }}"
     snapshot_name: "{{ vmware_target_snapshot_name | default(default_snapshot_name) }}"
   delegate_to: "{{ vsphere_api_host }}"
-  loop: "{{ vm_location['results'] }}"
