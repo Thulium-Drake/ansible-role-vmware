@@ -44,17 +44,17 @@ vmware_target_networks:
 #### Default VM hardware profile
 vmware_target_ram:
   mb: 512                     # Amount of RAM
-  reserved_mb: 512            # Amount of memory reserved for this VM
-  limit_mb: 512               # Limit of memory this VM can use
-  reservation_lock: 'False'   # If the reseverd memory is locked for use
-  hotadd: 'False'             # Add memory to this VM while it's running
+  # reserved_mb: 512            # Amount of memory reserved for this VM
+  # limit_mb: 512               # Limit of memory this VM can use
+  # reservation_lock: 'False'   # If the reseverd memory is locked for use
+  # hotadd: 'False'             # Add memory to this VM while it's running
 vmware_target_cpu:
   cpus: 1                     # The amount of vCPUs
   cores_per_socket: 1         # Cores per virtual CPU socket
-  limit_mhz: 8096             # Max amount of MHz this VM can use
-  reserved_mhz: 4096          # Reserved amount of MHz this VM can use
-  hotadd: 'False'             # Add CPUs to this VM while it's running
-  hotremove: 'False'          # Remove CPUs from this VM while it's running
+  # limit_mhz: 8096             # Max amount of MHz this VM can use
+  # reserved_mhz: 4096          # Reserved amount of MHz this VM can use
+  # hotadd: 'False'             # Add CPUs to this VM while it's running
+  # hotremove: 'False'          # Remove CPUs from this VM while it's running
 vmware_target_scsi: 'paravirtual'    # Type of HDD controller to use
 vmware_target_vm_version: 19         # VMWare Hardware version
 vmware_target_boot:
