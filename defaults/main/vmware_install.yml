@@ -5,5 +5,5 @@ vsphere_install_sdk: true
 # Git repo with VMWare SDK to clone
 vsphere_sdk_url: 'https://github.com/vmware/vsphere-automation-sdk-python'
 
-# vSphere version
-vsphere_version: '8.0.1.0'
+# vSphere SDK version
+vsphere_sdk_version: '8.0.1.0'

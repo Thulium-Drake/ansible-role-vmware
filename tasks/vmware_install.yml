@@ -14,7 +14,7 @@
   vars:
     vmware_install_vars:
       files:
-        - "{{ api_facts['ansible_facts']['ansible_os_family'] }}-{{ api_facts['ansible_facts']['ansible_distribution_major_version'] }}-vSphere-{{ vsphere_version.split('.')[0] }}.yml"
+        - "{{ api_facts['ansible_facts']['ansible_os_family'] }}-{{ api_facts['ansible_facts']['ansible_distribution_major_version'] }}-vSphere-{{ vsphere_sdk_version.split('.')[0] }}.yml"
         - "{{ api_facts['ansible_facts']['ansible_os_family'] }}-{{ api_facts['ansible_facts']['ansible_distribution_major_version'] }}.yml"
         - "{{ api_facts['ansible_facts']['ansible_os_family'] }}.yml"
       paths:
@@ -48,7 +48,7 @@
     repo: "{{ vsphere_sdk_url }}"
     dest: '/var/cache/ansible/vsphere-sdk'
     clone: true
-    version: "v{{ vsphere_version }}"
+    version: "v{{ vsphere_sdk_version }}"
   delegate_to: "{{ vsphere_api_host }}"
 
 - name: 'Install vSphere Automation SDK via pip'
