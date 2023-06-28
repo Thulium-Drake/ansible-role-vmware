@@ -56,6 +56,6 @@
   ansible.builtin.pip:
     chdir: '/var/cache/ansible/vsphere-sdk'
     name: '.'
-    state: 'forcereinstall'
+    state: 'present'
     executable: "{{ vmware_pip_executable }}"
   delegate_to: "{{ vsphere_api_host }}"
