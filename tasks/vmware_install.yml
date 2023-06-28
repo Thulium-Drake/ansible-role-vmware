@@ -38,8 +38,8 @@
   ansible.builtin.file:
     state: 'directory'
     path: '/var/cache/ansible/'
-    owner: 'root'
-    group: 'root'
+    owner: "{{ vsphere_download_sdk_privileged | ternary('root', vsphere_download_sdk_user) }}"
+    group: "{{ vsphere_download_sdk_privileged | ternary('root', vsphere_download_sdk_user) }}"
     mode: '0755'
   delegate_to: "{{ vsphere_api_host }}"
 
@@ -50,6 +50,7 @@
     clone: true
     version: "v{{ vsphere_sdk_version }}"
   delegate_to: "{{ vsphere_api_host }}"
+  become: "{{ vsphere_download_sdk_privileged }}"
 
 - name: 'Install vSphere Automation SDK via pip'
   ansible.builtin.pip:

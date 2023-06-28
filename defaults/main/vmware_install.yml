@@ -7,3 +7,11 @@ vsphere_sdk_url: 'https://github.com/vmware/vsphere-automation-sdk-python'
 
 # vSphere SDK version
 vsphere_sdk_version: '8.0.1.0'
+
+# Download as unprivileged user
+# This can be handy when SDK is located on a location that requires authentication
+# and the local root user on the controller does not have those credentials
+# Default downloads as root (as Github does not require authentication)
+vsphere_download_sdk_privileged: true
+# As the ansible_user variable isn't always available for this role, set it here
+vsphere_download_sdk_user: 'ansible'
