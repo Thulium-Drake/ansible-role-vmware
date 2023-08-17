@@ -8,6 +8,9 @@ vmware_target_force: false
 vmware_target_esxi_hostname: ''
 vmware_target_esxi_cluster: ''
 
+# Defaults to inventory_hostname
+vmware_target_hostname: ''
+
 # Default datastore to use
 vmware_default_datastore: 'datastore1'
 
