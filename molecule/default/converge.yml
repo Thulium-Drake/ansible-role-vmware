@@ -18,27 +18,27 @@
   hosts: 'vmware'
   gather_facts: false
   tasks:
-    - name: 'Create VM'
+    - name: 'Create VM'  # noqa var-naming[no-role-prefix]
       ansible.builtin.import_role:
         name: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') | basename }}"
       vars:
-        target_action: 'provision_guest'
-        target_state: 'present'
-        target_esxi_hostname: 'esxi.lab'
-        target_disks:
+        vmware_target_action: 'provision_guest'
+        vmware_target_state: 'present'
+        vmware_target_esxi_hostname: 'esxi.lab'
+        vmware_target_disks:
           - size_gb: 1
             type: 'thin'
             datastore: "{{ default_datastore }}"
-    - name: 'Snap VM'
+    - name: 'Snap VM'  # noqa var-naming[no-role-prefix]
       ansible.builtin.import_role:
         name: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') | basename }}"
       vars:
-        target_action: 'snap'
-        target_state: 'present'
-    - name: 'Delete VM'
+        vmware_target_action: 'snap'
+        vmware_target_state: 'present'
+    - name: 'Delete VM'  # noqa var-naming[no-role-prefix]
       ansible.builtin.import_role:
         name: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') | basename }}"
       vars:
-        target_action: 'provision_guest'
-        target_state: 'absent'
-        target_esxi_hostname: 'esxi.lab'
+        vmware_target_action: 'provision_guest'
+        vmware_target_state: 'absent'
+        vmware_target_esxi_hostname: 'esxi.lab'
