@@ -22,7 +22,7 @@
     password: "{{ vsphere_password }}"
     folder: "{{ vm_location['folders'][0] }}"
     datacenter: "{{ vm_location['folders'][0].split('/')[1] }}"
-    name: "{{ inventory_hostname }}"
+    name: "{{ vmware_target_hostname | default(inventory_hostname, true) }}"
     validate_certs: "{{ vsphere_validate_certs }}"
     state: "{{ vmware_target_state }}"
     snapshot_name: "{{ vmware_target_snapshot_name | default(default_snapshot_name) }}"

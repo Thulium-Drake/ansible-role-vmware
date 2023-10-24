@@ -7,7 +7,7 @@
     username: "{{ vsphere_username }}"
     password: "{{ vsphere_password }}"
     folder: "{{ vm_location['folders'][0] }}"
-    name: "{{ inventory_hostname }}"
+    name: "{{ vmware_target_hostname | default(inventory_hostname, true) }}"
     validate_certs: "{{ vsphere_validate_certs }}"
     state: "{{ vmware_target_state }}"
     state_change_timeout: "{{ vmware_powerstate_wait }}"

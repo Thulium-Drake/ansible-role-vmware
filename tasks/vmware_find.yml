@@ -7,17 +7,17 @@
     username: "{{ vsphere_username }}"
     password: "{{ vsphere_password }}"
     validate_certs: "{{ vsphere_validate_certs }}"
-    name: "{{ inventory_hostname }}"
+    name: "{{ vmware_target_hostname | default(inventory_hostname, true) }}"
   register: 'vm_location'
   delegate_to: "{{ vsphere_api_host }}"
 
-- name: 'Locate VM in vSphere'
+- name: 'Gather info on VM from vSphere'
   community.vmware.vmware_guest_info:
     hostname: "{{ vsphere_host }}"
     username: "{{ vsphere_username }}"
     password: "{{ vsphere_password }}"
     validate_certs: "{{ vsphere_validate_certs }}"
-    name: "{{ inventory_hostname }}"
+    name: "{{ vmware_target_hostname | default(inventory_hostname, true) }}"
     datacenter: "{{ vm_location['folders'][0].split('/')[1] }}"
   register: 'vm_info'
   delegate_to: "{{ vsphere_api_host }}"
