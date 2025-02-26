@@ -13,5 +13,8 @@ platforms:
     privileged: true
 provisioner:
   name: 'ansible'
+  config_options:
+    defaults:
+      roles_path: "$MOLECULE_PROJECT_DIRECTORY/.."
 verifier:
   name: 'ansible'
